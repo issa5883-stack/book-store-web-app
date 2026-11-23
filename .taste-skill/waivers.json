@@ -1,0 +1,3 @@
+[
+  { "check": "container-edges", "target": "div.mo-lc__stage", "reason": "the stage is injected by the kit's line-carries-colour moment (moments.js) as the section's own overlay layer; the page adds no markup beside .wrap" }
+]

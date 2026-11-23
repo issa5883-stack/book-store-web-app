@@ -1,0 +1,10 @@
+{
+ "page": null,
+ "dir": "c:\\Users\\AG\\booksweb",
+ "kind": "software",
+ "start": "2026-11-23T18:23:00.760Z",
+ "by": "start.mjs",
+ "url": "http://127.0.0.1:8000/",
+ "category": "PDF book library",
+ "primary": "Find a book"
+}

@@ -1,0 +1,20 @@
+{
+ "palettes": [
+  "mint-pink-accounts"
+ ],
+ "types": [
+  "geist"
+ ],
+ "dealt": [
+  "geist",
+  "schibsted",
+  "urbanist"
+ ],
+ "moments": [
+  {
+   "id": "line-carries-colour",
+   "at": "2026-11-23T18:23:06.484Z",
+   "seed": "a060c729"
+  }
+ ]
+}

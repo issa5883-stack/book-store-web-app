@@ -1,0 +1,141 @@
+consistency  http://127.0.0.1:8000/
+--quick: not checked: scroll-linked (stepping), scroll-reveal (the reveal walk; IntersectionObserver reveals are read), hover-spill, hidden-visual, loop-pause, forms, reduced-motion, the dead-IntersectionObserver walk (hidden content is read with scripts off and under reduced motion), hover-move. Still told: IntersectionObserver reveals (scroll-reveal), held sections (pinned) and CSS scroll timelines (scroll-linked); faults inside held or [data-big-scene] sections are WARNs
+
+1440x900  9 screens  1 FAIL  19 WARN
+  WARN flush           section#admins > div.mo-lc__stage > div.mo-lc__cover
+       its first line sits 17px under the top edge of section#admins, where the ground changes  [1440-10-flush.jpg]
+       fix: give the section its padding at the edge where the ground changes (the closing call keeps a clear gap above the footer)
+  WARN overlap-text    div.ui.app > div.app__pane.app__pane--open > div.ui.ui-doc > aside.ui-doc__note.ui-panel  "Rule Any edit sends the request back to "
+       inside div.ui.ui-doc, a box sits on the mock's own text and hides it mid-line ("A handbook of habits for writi")  [1440-04-overlap-text.jpg]
+       fix: move the box off the text (or the text off the box)
+  WARN text-only       section#questions  "Questions"
+       the section is only text: no picture, icon, mock or effect in it  [1440-07-text-only.jpg]
+       fix: give the section a visual: a photograph that fits, the real icons, or a UI fragment on a ground
+  WARN text-contrast   div.ui-win__main > ul.ui-win__rows > li.ui-win__row:nth-of-type(1) > span.ui-win__st  "Approved"
+       8 lines of text in drawn mocks read under 4.5:1 (2 colour pairs), the worst "Approved" in #858585 on #f8f8f8 at 3.47:1  [1440-05-text-contrast.jpg]
+       fix: lift the mocks' muted text (labels, meta, initials) to 4.5:1 on their own panel, or set it larger
+  WARN section-gaps    section#questions / section#reading
+       238px between these sections, +27% against the median 187px  [1440-08-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  WARN section-gaps    section#reading / section#admins
+       89px between these sections, -52% against the median 187px of gaps at a change of ground  [1440-11-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  WARN section-gaps    section#reading / section#admins
+       uneven space at the edge of a band: 72px outside its edge, 17px inside it (the space on either side of a change of ground reads as one gap only when the two match)  [1440-12-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  WARN links           div.wrap > div.closing__links > div.footer__legal > a.credits  "Photographs via Wikimedia Commons"
+       "Photographs via Wikimedia Commons" goes to http://127.0.0.1:8000/credits.html, which does not exist here  [1440-13-links.jpg]
+       fix: point every link at a real section, page or file
+  WARN photo-credit    (the page text)
+       1 library source (wikimedia): the page credits wikimedia; confirm each shows the client's own product, place or people
+       fix: confirm the library photograph shows the client's own product, place or people; otherwise replace it
+  WARN nav-labels      header.nav > div.wrap.nav__bar > a.nav__logo  "BooksWeb"
+       "BooksWeb" opens a section headed "A shared library of free PDF books"  [1440-01-nav-labels.jpg]
+       fix: name each nav link after the heading of the section it opens
+  WARN nav-labels      div.nav__item:nth-of-type(1) > div.nav__menu > div.wrap.grid > a.menu-card.span-4:nth-of-type(1)  "Clean CodePendingThe Pragmatic Programme"
+       "Clean CodePendingThe Pragmatic Programme" opens a section headed "A review queue for every upload"
+       fix: name each nav link after the heading of the section it opens
+  WARN nav-labels      div.nav__item:nth-of-type(1) > div.nav__menu > div.wrap.grid > a.menu-card.span-4:nth-of-type(2)  "Title, author, categoryDonePDF, up to 50"
+       "Title, author, categoryDonePDF, up to 50" opens a section headed "A book goes public in 3 steps"
+       fix: name each nav link after the heading of the section it opens
+  WARN nav-labels      div.wrap.nav__bar > nav.nav__links > div.nav__item:nth-of-type(3) > a.nav__link  "Reading"
+       "Reading" opens a section headed "Read in the browser or keep the PDF"  [1440-02-nav-labels.jpg]
+       fix: name each nav link after the heading of the section it opens
+  WARN label-centre    header.nav > div.wrap.nav__bar > div.nav__actions > a.btn.btn--primary  "Find a book"
+       its label sits 18px off-centre (25px of room at the left, 43px at the right)  [1440-03-label-centre.jpg]
+       fix: centre the label in its button, or fill the empty side with an icon
+  WARN copy-length     section#questions  "Questions"
+       1 section over 90 words a screen outside the UI mocks ("Questions" 157); 66 words a screen across the page (394 words in 6 screens): a tech page says it in about 80 or fewer  [1440-09-copy-length.jpg]
+       fix: cut every section to its heading, one line and the product UI: the UI says the rest; no second paragraph, no list of feature sentences
+  WARN nav-current     header.nav
+       the nav stays on screen with 5 links to the page's sections, but never marks the one you are in (no link changes as the page scrolls)  [1440-06-nav-current.jpg]
+       fix: mark the link of the section on screen (a colour, a weight or a line under it) as the visitor scrolls
+  WARN action-repeat   header.nav > div.wrap.nav__bar > div.nav__actions > a.btn.btn--primary:nth-of-type(2)  "find a book"
+       "find a book" shows 2 times on the first screen at 1440px (nav, hero): the nav's button and the hero's; nothing else on the screen may repeat it  [1440-14-action-repeat.jpg]
+       fix: show the action once a screen besides the nav's button: the hero's, the close's or the phone bar's, never all at once
+  FAIL container-edges section#admins > div.mo-lc__stage
+       a child of section 6 beside its .wrap is no valid background layer: not img, picture, video or canvas; does not span the screen from 0 to 1440px; z-index 20, not 0 (SR-6)  [1440-rhythm-01-container-edges.jpg]
+       fix: build the page as header.nav, a main of sections (each one in-flow .wrap plus background layers) and footer.closing
+  WARN container-edges section#admins > div.mo-lc__stage > div.mo-lc__cover
+       a box runs 17-1422px, outside the container lines of section 6 at 80-1360px: full width is for background layers and grounds only (it is in a scroll scene: told as a WARN) (SR-6)
+       fix: keep it inside the container lines (.wrap): full width is for background layers and grounds only
+  WARN container-edges section#admins > div.mo-lc__stage > div.mo-lc__cover
+       a box over half the container wide runs 17-1422px, not on the container's lines at 80-1360px (it is in a scroll scene: told as a WARN) (SR-6)
+       fix: run the picture or box from the container's left line to its right line, or put it in a row or a split
+
+390x844  11 screens  0 FAIL  6 WARN
+  WARN overlap-text    div.ui.app > div.app__pane.app__pane--open > div.ui.ui-doc > aside.ui-doc__note.ui-panel  "Check Category matches the book. Ready t"
+       inside div.ui.ui-doc, a box sits on the mock's own text and hides it mid-line ("A handbook of habits for writi")  [390-02-overlap-text.jpg]
+       fix: move the box off the text (or the text off the box)
+  WARN text-only       section#questions  "Questions"
+       the section is only text: no picture, icon, mock or effect in it  [390-05-text-only.jpg]
+       fix: give the section a visual: a photograph that fits, the real icons, or a UI fragment on a ground
+  WARN cta             section#steps  "A book goes public in 3 steps"
+       a section over 1.5 screens long with no link or button in it  [390-03-cta.jpg]
+       fix: add the action: a button in the hero, one on every priced item, one in the closing section
+  WARN text-contrast   li.ui-note:nth-of-type(1) > span.ui-note__text > span.ui-note__title > time  "now"
+       3 lines of text in drawn mocks read under 4.5:1 (1 colour pair), the worst "now" in #868686 on #ffffff at 3.64:1  [390-04-text-contrast.jpg]
+       fix: lift the mocks' muted text (labels, meta, initials) to 4.5:1 on their own panel, or set it larger
+  WARN section-gaps    section#questions / section#reading
+       193px between these sections, +37% against the median 141px  [390-06-section-gaps.jpg]
+       fix: use one gap between sections (all within 25% of each other)
+  WARN label-centre    header.nav > div.wrap.nav__bar > div.nav__actions > a.btn.btn--primary  "Find a book"
+       its label sits 18px off-centre (13px of room at the left, 31px at the right)  [390-01-label-centre.jpg]
+       fix: centre the label in its button, or fill the empty side with an icon
+
+first screen at 1280, 1152, 1024, 896, 768  0 FAIL  0 WARN
+
+the page at 320x640, walked for what runs past the screen's edge  0 FAIL
+
+checks
+  PASS assets                 PASS shader-lint            PASS gl-fallback            
+  PASS empty-visual           PASS hero-fill              WARN flush                  
+  PASS placeholder            PASS sample-label           PASS caption                
+  PASS credit-wall            PASS nav                    PASS nav-covers             
+  PASS spill                  PASS off-viewport           PASS fold-card              
+  SKIP hover-spill            WARN overlap-text           PASS collide                
+  PASS tap-size               PASS row-gap                PASS cut-text               
+  PASS fold-cut               PASS marquee                SKIP scroll-linked          
+  SKIP scroll-reveal          PASS pinned                 SKIP loop-pause             
+  SKIP reduced-motion         PASS hidden-content         PASS webgl                  
+  PASS no-visual              WARN text-only              PASS card-visual            
+  SKIP hidden-visual          PASS card-family            PASS card-layout            
+  PASS nesting                PASS effect-repeat          PASS ui-fit                 
+  PASS ui-centre              PASS dark-ground            PASS button-styles          
+  PASS button-shape           PASS same-action            PASS button-picture         
+  WARN cta                    PASS pricing-tiers          PASS copy-headline          
+  PASS copy-fact              PASS copy-headings          PASS copy-buttons           
+  PASS copy-actions           PASS heading-scale          PASS stagger                
+  PASS top-stagger            PASS off-grid               PASS col-edge               
+  PASS right-edge             PASS centre-axis            PASS tilt                   
+  PASS contrast               WARN text-contrast          PASS body-size              
+  PASS busy-ground            WARN section-gaps           PASS proximity              
+  PASS hole                   WARN links                  SKIP forms                  
+  PASS photo-upscale          PASS photo-set              WARN photo-credit           
+  PASS nav-family             WARN nav-labels             PASS link-styles            
+  PASS heading-align          WARN label-centre           PASS fake-button            
+  PASS stranded-action        PASS orphan                 PASS unit-break             
+  PASS tab-wrap               PASS effects-fit            PASS fade-cut               
+  PASS photo-weight           WARN copy-length            WARN nav-current            
+  PASS progress-bar           PASS photo-repeat           PASS button-contrast        
+  PASS photo-print            PASS grounds                PASS split-align            
+  PASS fact-agree             PASS fold-action            PASS action-count           
+  PASS one-screen             SKIP hover                  SKIP hover-move             
+  PASS product-shown          PASS same-object            PASS font-load              
+  PASS visual-caption         PASS visual-empty           PASS effect-kind            
+  PASS hero-enter             PASS moment-none            PASS street-number          
+  PASS postcode               PASS coordinates            PASS company-number         
+  PASS phone-number           PASS hero-screen            PASS section-height         
+  PASS section-air            PASS one-section            PASS one-heading            
+  FAIL container-edges        PASS row-lines              PASS split-pair             
+  PASS motion-layer           PASS count-text             PASS loop-cycle             
+  PASS section-tile           PASS empty-area             PASS a11y-name              
+  PASS img-alt                PASS field-label            PASS heading-order          
+  PASS tabindex               PASS focus-ring             PASS focus-visible          
+  PASS focus-hidden           PASS skip-link              PASS menu-toggle            
+  PASS lang                   PASS page-meta              PASS share-meta             
+  WARN action-repeat          PASS map-link               PASS open-now               
+  PASS assumed                PASS run-on                 PASS form-fields            
+  PASS form-send              
+
+total  1 FAIL  25 WARN  (crops and report.json in C:\Users\AG\AppData\Local\Temp\taste-skill-consistency\127.0.0.1-8000)

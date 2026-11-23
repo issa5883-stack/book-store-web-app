@@ -1,0 +1,60 @@
+{
+ "note": "Credits for the photographs in this folder: photos.mjs credits prints the footer block for the ones the pages use.",
+ "photos": [
+  {
+   "file": "photo-f62645688-960.jpg",
+   "files": [
+    "photo-f62645688-500.jpg",
+    "photo-f62645688-960.jpg"
+   ],
+   "id": "f62645688",
+   "alt": "Hamamatsu Municipal Sakuma Library reading room ac (2)",
+   "by": "Asturio Cantabrio",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Hamamatsu_Municipal_Sakuma_Library_reading_room_ac_(2).jpg",
+   "source": "Wikimedia Commons"
+  },
+  {
+   "file": "photo-f195053383-960.jpg",
+   "files": [
+    "photo-f195053383-500.jpg",
+    "photo-f195053383-960.jpg"
+   ],
+   "id": "f195053383",
+   "alt": "Hyvämäki Rectory library room",
+   "by": "Niera",
+   "licence": "CC0",
+   "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+   "page": "https://commons.wikimedia.org/wiki/File:Hyv%C3%A4m%C3%A4ki_Rectory_library_room.jpg",
+   "source": "Wikimedia Commons"
+  },
+  {
+   "file": "photo-f124857880-500.jpg",
+   "files": [
+    "photo-f124857880-500.jpg"
+   ],
+   "id": "f124857880",
+   "alt": "Catullus Books NYPL Rose Main Reading Room",
+   "by": "Umimmak",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Catullus_Books_NYPL_Rose_Main_Reading_Room.jpg",
+   "source": "Wikimedia Commons"
+  },
+  {
+   "file": "photo-f56443879-960.jpg",
+   "files": [
+    "photo-f56443879-500.jpg",
+    "photo-f56443879-960.jpg"
+   ],
+   "id": "f56443879",
+   "alt": "Maxwell Community Library reopens 111208-F-EX201-091",
+   "by": "Melanie Cox",
+   "licence": "Public domain",
+   "licenceUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+   "page": "https://commons.wikimedia.org/wiki/File:Maxwell_Community_Library_reopens_111208-F-EX201-091.jpg",
+   "source": "Wikimedia Commons"
+  }
+ ]
+}

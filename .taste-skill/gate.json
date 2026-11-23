@@ -1,0 +1,292 @@
+{
+ "start": "2026-11-23T18:23:00.760Z",
+ "round": 0,
+ "idle": 0,
+ "errors": 0,
+ "status": "pass",
+ "history": [
+  {
+   "at": "2026-11-23T19:12:43.568Z",
+   "mode": "manual",
+   "status": "pass",
+   "fails": 0,
+   "round": 0,
+   "reused": false,
+   "stopHookActive": false
+  },
+  {
+   "at": "2026-11-23T19:19:31.113Z",
+   "mode": "hook",
+   "host": "claude",
+   "decision": "allow",
+   "reason": "no build is active here",
+   "stopHookActive": false
+  }
+ ],
+ "max": 3,
+ "marker": {
+  "page": null,
+  "dir": "c:\\Users\\AG\\booksweb",
+  "kind": "software",
+  "start": "2026-11-23T18:23:00.760Z",
+  "by": "start.mjs",
+  "url": "http://127.0.0.1:8000/",
+  "category": "PDF book library",
+  "primary": "Find a book"
+ },
+ "manual": true,
+ "fp": "b2e91f84733c9c3f",
+ "page": "http://127.0.0.1:8000/",
+ "found": {
+  "fails": [
+   {
+    "check": "container-edges",
+    "where": "section#admins > div.mo-lc__stage",
+    "msg": "a child of section 6 beside its .wrap is no valid background layer: not img, picture, video or canvas; does not span the screen from 0 to 1440px; z-index 20, not 0 (SR-6)",
+    "fix": "build the page as header.nav, a main of sections (each one in-flow .wrap plus background layers) and footer.closing",
+    "widths": [
+     1440
+    ],
+    "from": "consistency",
+    "ids": [
+     "container-edges"
+    ],
+    "wheres": [
+     "section#admins > div.mo-lc__stage"
+    ]
+   }
+  ],
+  "warns": [
+   {
+    "check": "flush",
+    "where": "section#admins > div.mo-lc__stage > div.mo-lc__cover",
+    "msg": "its first line sits 17px under the top edge of section#admins, where the ground changes",
+    "fix": "give the section its padding at the edge where the ground changes (the closing call keeps a clear gap above the footer)",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "overlap-text",
+    "where": "div.ui.app > div.app__pane.app__pane--open > div.ui.ui-doc > aside.ui-doc__note.ui-panel \"Rule Any edit sends the request back to \"",
+    "msg": "inside div.ui.ui-doc, a box sits on the mock's own text and hides it mid-line (\"A handbook of habits for writi\")",
+    "fix": "move the box off the text (or the text off the box)",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "text-only",
+    "where": "section#questions \"Questions\"",
+    "msg": "the section is only text: no picture, icon, mock or effect in it",
+    "fix": "give the section a visual: a photograph that fits, the real icons, or a UI fragment on a ground",
+    "widths": [
+     1440,
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "text-contrast",
+    "where": "div.ui-win__main > ul.ui-win__rows > li.ui-win__row:nth-of-type(1) > span.ui-win__st \"Approved\"",
+    "msg": "8 lines of text in drawn mocks read under 4.5:1 (2 colour pairs), the worst \"Approved\" in #858585 on #f8f8f8 at 3.47:1",
+    "fix": "lift the mocks' muted text (labels, meta, initials) to 4.5:1 on their own panel, or set it larger",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "section-gaps",
+    "where": "section#questions / section#reading",
+    "msg": "238px between these sections, +27% against the median 187px",
+    "fix": "use one gap between sections (all within 25% of each other)",
+    "widths": [
+     1440,
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "section-gaps",
+    "where": "section#reading / section#admins",
+    "msg": "89px between these sections, -52% against the median 187px of gaps at a change of ground",
+    "fix": "use one gap between sections (all within 25% of each other)",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "links",
+    "where": "div.wrap > div.closing__links > div.footer__legal > a.credits \"Photographs via Wikimedia Commons\"",
+    "msg": "\"Photographs via Wikimedia Commons\" goes to http://127.0.0.1:8000/credits.html, which does not exist here",
+    "fix": "point every link at a real section, page or file",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "photo-credit",
+    "where": "(the page text)",
+    "msg": "1 library source (wikimedia): the page credits wikimedia; confirm each shows the client's own product, place or people",
+    "fix": "confirm the library photograph shows the client's own product, place or people; otherwise replace it",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "nav-labels",
+    "where": "header.nav > div.wrap.nav__bar > a.nav__logo \"BooksWeb\"",
+    "msg": "\"BooksWeb\" opens a section headed \"A shared library of free PDF books\"",
+    "fix": "name each nav link after the heading of the section it opens",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "nav-labels",
+    "where": "div.nav__item:nth-of-type(1) > div.nav__menu > div.wrap.grid > a.menu-card.span-4:nth-of-type(1) \"Clean CodePendingThe Pragmatic Programme\"",
+    "msg": "\"Clean CodePendingThe Pragmatic Programme\" opens a section headed \"A review queue for every upload\"",
+    "fix": "name each nav link after the heading of the section it opens",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "nav-labels",
+    "where": "div.nav__item:nth-of-type(1) > div.nav__menu > div.wrap.grid > a.menu-card.span-4:nth-of-type(2) \"Title, author, categoryDonePDF, up to 50\"",
+    "msg": "\"Title, author, categoryDonePDF, up to 50\" opens a section headed \"A book goes public in 3 steps\"",
+    "fix": "name each nav link after the heading of the section it opens",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "nav-labels",
+    "where": "div.wrap.nav__bar > nav.nav__links > div.nav__item:nth-of-type(3) > a.nav__link \"Reading\"",
+    "msg": "\"Reading\" opens a section headed \"Read in the browser or keep the PDF\"",
+    "fix": "name each nav link after the heading of the section it opens",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "label-centre",
+    "where": "header.nav > div.wrap.nav__bar > div.nav__actions > a.btn.btn--primary \"Find a book\"",
+    "msg": "its label sits 18px off-centre (25px of room at the left, 43px at the right)",
+    "fix": "centre the label in its button, or fill the empty side with an icon",
+    "widths": [
+     1440,
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "copy-length",
+    "where": "section#questions \"Questions\"",
+    "msg": "1 section over 90 words a screen outside the UI mocks (\"Questions\" 157); 66 words a screen across the page (394 words in 6 screens): a tech page says it in about 80 or fewer",
+    "fix": "cut every section to its heading, one line and the product UI: the UI says the rest; no second paragraph, no list of feature sentences",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "nav-current",
+    "where": "header.nav",
+    "msg": "the nav stays on screen with 5 links to the page's sections, but never marks the one you are in (no link changes as the page scrolls)",
+    "fix": "mark the link of the section on screen (a colour, a weight or a line under it) as the visitor scrolls",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "action-repeat",
+    "where": "header.nav > div.wrap.nav__bar > div.nav__actions > a.btn.btn--primary:nth-of-type(2) \"find a book\"",
+    "msg": "\"find a book\" shows 2 times on the first screen at 1440px (nav, hero): the nav's button and the hero's; nothing else on the screen may repeat it",
+    "fix": "show the action once a screen besides the nav's button: the hero's, the close's or the phone bar's, never all at once",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "container-edges",
+    "where": "section#admins > div.mo-lc__stage > div.mo-lc__cover",
+    "msg": "a box runs 17-1422px, outside the container lines of section 6 at 80-1360px: full width is for background layers and grounds only (it is in a scroll scene: told as a WARN) (SR-6)",
+    "fix": "keep it inside the container lines (.wrap): full width is for background layers and grounds only",
+    "widths": [
+     1440
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "overlap-text",
+    "where": "div.ui.app > div.app__pane.app__pane--open > div.ui.ui-doc > aside.ui-doc__note.ui-panel \"Check Category matches the book. Ready t\"",
+    "msg": "inside div.ui.ui-doc, a box sits on the mock's own text and hides it mid-line (\"A handbook of habits for writi\")",
+    "fix": "move the box off the text (or the text off the box)",
+    "widths": [
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "cta",
+    "where": "section#steps \"A book goes public in 3 steps\"",
+    "msg": "a section over 1.5 screens long with no link or button in it",
+    "fix": "add the action: a button in the hero, one on every priced item, one in the closing section",
+    "widths": [
+     390
+    ],
+    "from": "consistency"
+   },
+   {
+    "check": "text-contrast",
+    "where": "li.ui-note:nth-of-type(1) > span.ui-note__text > span.ui-note__title > time \"now\"",
+    "msg": "3 lines of text in drawn mocks read under 4.5:1 (1 colour pair), the worst \"now\" in #868686 on #ffffff at 3.64:1",
+    "fix": "lift the mocks' muted text (labels, meta, initials) to 4.5:1 on their own panel, or set it larger",
+    "widths": [
+     390
+    ],
+    "from": "consistency"
+   }
+  ],
+  "crashed": [],
+  "seconds": {
+   "consistency": 128,
+   "layout": 6
+  }
+ },
+ "open": [],
+ "waived": [
+  {
+   "check": "container-edges",
+   "where": "section#admins > div.mo-lc__stage",
+   "msg": "a child of section 6 beside its .wrap is no valid background layer: not img, picture, video or canvas; does not span the screen from 0 to 1440px; z-index 20, not 0 (SR-6)",
+   "fix": "build the page as header.nav, a main of sections (each one in-flow .wrap plus background layers) and footer.closing",
+   "widths": [
+    1440
+   ],
+   "from": "consistency",
+   "ids": [
+    "container-edges"
+   ],
+   "wheres": [
+    "section#admins > div.mo-lc__stage"
+   ],
+   "reason": "the stage is injected by the kit's line-carries-colour moment (moments.js) as the section's own overlay layer; the page adds no markup beside .wrap"
+  }
+ ],
+ "warnCount": 20,
+ "at": "2026-11-23T19:12:43.569Z"
+}

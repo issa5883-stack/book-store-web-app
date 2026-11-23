@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
@@ -27,6 +28,8 @@ class BookController extends Controller
             'books' => Book::approved()->count(),
             'categories' => Category::count(),
             'downloads' => (int) Book::approved()->sum('downloads'),
+            'pending' => Book::pending()->count(),
+            'members' => User::count(),
         ];
 
         return view('home', compact('latestBooks', 'popularBooks', 'categories', 'stats'));

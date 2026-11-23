@@ -159,9 +159,9 @@ class Book extends Model
     public function coverColors(): array
     {
         $palettes = [
-            ['#4338ca', '#818cf8'], ['#0f766e', '#5eead4'], ['#b45309', '#fcd34d'],
-            ['#be123c', '#fda4af'], ['#1d4ed8', '#93c5fd'], ['#7e22ce', '#d8b4fe'],
-            ['#15803d', '#86efac'], ['#334155', '#94a3b8'],
+            ['#1e3a5f', '#7da7d9'], ['#0f5e57', '#6fcfc0'], ['#8a4a0b', '#e9b960'],
+            ['#9f1d35', '#f2a0ad'], ['#1d4ed8', '#93c5fd'], ['#7c2d12', '#f0a77a'],
+            ['#1f6b3a', '#8fd1a6'], ['#334155', '#94a3b8'],
         ];
 
         return $palettes[crc32($this->title) % count($palettes)];
