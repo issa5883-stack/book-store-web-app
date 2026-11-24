@@ -36,7 +36,7 @@ class BookRequestController extends Controller
             'reviewed_at' => now(),
         ]);
 
-        return redirect()->route('admin.requests.index')->with('success', "\"{$book->title}\" was approved and is now public.");
+        return redirect()->route('admin.requests.index')->with('success', __('":title" was approved and is now public.', ['title' => $book->title]));
     }
 
     public function reject(Request $request, Book $book): RedirectResponse
@@ -52,6 +52,6 @@ class BookRequestController extends Controller
             'reviewed_at' => now(),
         ]);
 
-        return redirect()->route('admin.requests.index')->with('success', "\"{$book->title}\" was rejected.");
+        return redirect()->route('admin.requests.index')->with('success', __('":title" was rejected.', ['title' => $book->title]));
     }
 }

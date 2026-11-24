@@ -45,7 +45,7 @@ class AdminBookController extends Controller
 
         Book::create($data);
 
-        return redirect()->route('admin.books.index')->with('success', 'Book published successfully.');
+        return redirect()->route('admin.books.index')->with('success', __('Book published successfully.'));
     }
 
     public function edit(Book $book): View
@@ -59,7 +59,7 @@ class AdminBookController extends Controller
     {
         $book->update($this->bookDataWithFiles($request, $book));
 
-        return redirect()->route('admin.books.index')->with('success', 'Book updated.');
+        return redirect()->route('admin.books.index')->with('success', __('Book updated.'));
     }
 
     public function destroy(Book $book): RedirectResponse
@@ -67,6 +67,6 @@ class AdminBookController extends Controller
         $book->deleteFiles();
         $book->delete();
 
-        return back()->with('success', 'Book deleted.');
+        return back()->with('success', __('Book deleted.'));
     }
 }

@@ -35,7 +35,7 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->route('my-books.index')->with('success', 'Welcome '.$user->name.'! Your account is ready.');
+        return redirect()->route('my-books.index')->with('success', __('Welcome :name! Your account is ready.', ['name' => $user->name]));
     }
 
     public function showSignIn(): View|RedirectResponse
@@ -60,7 +60,7 @@ class AuthController extends Controller
             return redirect()->intended(route('my-books.index'));
         }
 
-        return back()->withErrors(['email' => 'Email or password is wrong.'])->onlyInput('email');
+        return back()->withErrors(['email' => __('Email or password is wrong.')])->onlyInput('email');
     }
 
     public function logout(Request $request): RedirectResponse

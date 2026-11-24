@@ -21,7 +21,7 @@ class AdminAuth
         if (! $admin) {
             $request->session()->forget('admin_id');
 
-            return redirect()->route('admin.login')->with('error', 'Please sign in as an administrator.');
+            return redirect()->route('admin.login')->with('error', __('Please sign in as an administrator.'));
         }
 
         $request->attributes->set('admin', $admin);

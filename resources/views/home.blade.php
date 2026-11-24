@@ -5,15 +5,15 @@
     $initials = fn (string $name): string => collect(explode(' ', $name))->map(fn ($part) => mb_substr($part, 0, 1))->take(2)->implode('');
 @endphp
 <!doctype html>
-<html lang="en" data-type="software" data-radius="soft" data-ground="sky" data-buttons="arrow" data-motion>
+<html lang="{{ app()->getLocale() }}" dir="{{ config('app.supported_locales.'.app()->getLocale().'.dir', 'ltr') }}" data-type="software" data-radius="soft" data-ground="sky" data-buttons="arrow" data-motion>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>BooksWeb: a shared PDF library for readers</title>
-<meta name="description" content="Read and download free PDF books, or upload your own for an admin to review and publish.">
+<title>{{ __('BooksWeb: a shared PDF library for readers') }}</title>
+<meta name="description" content="{{ __('Read and download free PDF books, or upload your own for an admin to review and publish.') }}">
 <meta property="og:type" content="website">
-<meta property="og:title" content="BooksWeb: a shared PDF library for readers">
-<meta property="og:description" content="Free PDF books, each one checked by an admin before it goes public.">
+<meta property="og:title" content="{{ __('BooksWeb: a shared PDF library for readers') }}">
+<meta property="og:description" content="{{ __('Free PDF books, each one checked by an admin before it goes public.') }}">
 <meta property="og:image" content="{{ asset('share.jpg') }}">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
@@ -23,7 +23,7 @@
 <meta name="page-type" content="software">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..500{{ app()->getLocale() === 'ar' ? '&family=Cairo:wght@400..700' : '' }}&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ $kit('system.css') }}">
 <link rel="stylesheet" href="{{ $kit('ui/cards.css') }}">
 <link rel="stylesheet" href="{{ $kit('motion/motion.css') }}">
@@ -138,6 +138,19 @@
   .menu-card .panel .menu-mini { position: absolute; inset: 24px 24px auto 24px; display: grid; gap: 6px; font-size: 13px; }
   .menu-mini span { display: flex; justify-content: space-between; gap: 8px; padding: 8px 10px; border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px rgb(0 0 0 / .06); }
   .menu-mini em { font-style: normal; color: var(--muted); }
+
+  /* language switcher in the top bar */
+  .lang-switch { display: inline-flex; align-items: center; gap: 6px; }
+  .lang-switch .icon { width: 16px; height: 16px; }
+
+  /* Arabic: Cairo font, no Latin letter-spacing, mirrored layout details */
+  html[lang="ar"] { --font-display: "Cairo", "Geist", system-ui, sans-serif; --font-text: "Cairo", "Geist", system-ui, sans-serif; --display-tracking: 0; --display-tracking-xl: 0; }
+  html[lang="ar"] .lib-open__meta h4 { letter-spacing: 0; }
+  [dir="rtl"] .lib-win { text-align: right; }
+  [dir="rtl"] .lib-list { border-right: 0; border-left: 1px solid rgb(0 0 0 / .07); }
+  [dir="rtl"] .app > .app__pane + .app__pane { border-left: 0; border-right: 1px solid var(--u-line); }
+  @media (max-width: 1023px) { [dir="rtl"] .app > .app__pane + .app__pane { border-right: 0; } }
+  [dir="rtl"] .m-arrow { transform: scaleX(-1); }
 </style>
 </head>
 <body>
@@ -147,45 +160,46 @@
      moments: line-carries-colour on #admins (the dark band) -->
 <header class="nav">
   <div class="wrap nav__bar">
-    <a class="skip-link" href="#top">Skip to content</a>
+    <a class="skip-link" href="#top">{{ __('Skip to content') }}</a>
     <a class="nav__logo" href="#top"><span class="mark" data-mark="dots" aria-hidden="true"></span>BooksWeb</a>
-    <nav class="nav__links" aria-label="Main">
+    <nav class="nav__links" aria-label="{{ __('Main') }}">
       <div class="nav__item">
-        <a class="nav__link" href="#review">Review <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="nav__link" href="#review">{{ __('Review') }} <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         <div class="nav__menu">
           <div class="wrap grid">
             <a class="menu-card span-4" href="#review">
-              <div class="panel"><div class="menu-mini" aria-hidden="true">@foreach ($queue->take(3) as $book)<span>{{ Str::limit($book->title, 26) }}<em>Pending</em></span>@endforeach</div></div>
-              <span class="t-card">Review queue</span>
-              <span class="t-small muted">Every member upload waits here for an admin</span>
+              <div class="panel"><div class="menu-mini" aria-hidden="true">@foreach ($queue->take(3) as $book)<span>{{ Str::limit($book->title, 26) }}<em>{{ __('Pending') }}</em></span>@endforeach</div></div>
+              <span class="t-card">{{ __('Review queue') }}</span>
+              <span class="t-small muted">{{ __('Every member upload waits here for an admin') }}</span>
             </a>
             <a class="menu-card span-4" href="#steps">
-              <div class="panel"><div class="menu-mini" aria-hidden="true"><span>Title, author, category<em>Done</em></span><span>PDF, up to 50 MB<em>Done</em></span><span>Cover image<em>Optional</em></span></div></div>
-              <span class="t-card">Upload steps</span>
-              <span class="t-small muted">From a PDF on your disk to a public book page</span>
+              <div class="panel"><div class="menu-mini" aria-hidden="true"><span>{{ __('Title, author, category') }}<em>{{ __('Done') }}</em></span><span>{{ __('PDF, up to 50 MB') }}<em>{{ __('Done') }}</em></span><span>{{ __('Cover image') }}<em>{{ __('Optional') }}</em></span></div></div>
+              <span class="t-card">{{ __('Upload steps') }}</span>
+              <span class="t-small muted">{{ __('From a PDF on your disk to a public book page') }}</span>
             </a>
             <a class="menu-card span-4" href="#admins">
-              <div class="panel"><div class="menu-mini" aria-hidden="true"><span>Books<em>{{ $stats['books'] }}</em></span><span>Categories<em>{{ $stats['categories'] }}</em></span><span>Members<em>{{ $stats['members'] }}</em></span></div></div>
-              <span class="t-card">Admin panel</span>
-              <span class="t-small muted">Books, categories and members in one place</span>
+              <div class="panel"><div class="menu-mini" aria-hidden="true"><span>{{ __('Books') }}<em>{{ $stats['books'] }}</em></span><span>{{ __('Categories') }}<em>{{ $stats['categories'] }}</em></span><span>{{ __('Members') }}<em>{{ $stats['members'] }}</em></span></div></div>
+              <span class="t-card">{{ __('Admin panel') }}</span>
+              <span class="t-small muted">{{ __('Books, categories and members in one place') }}</span>
             </a>
           </div>
         </div>
       </div>
-      <div class="nav__item"><a class="nav__link" href="#steps">Steps</a></div>
-      <div class="nav__item"><a class="nav__link" href="#reading">Reading</a></div>
-      <div class="nav__item"><a class="nav__link" href="#admins">Admins</a></div>
-      <div class="nav__item"><a class="nav__link" href="#questions">Questions</a></div>
+      <div class="nav__item"><a class="nav__link" href="#steps">{{ __('Steps') }}</a></div>
+      <div class="nav__item"><a class="nav__link" href="#reading">{{ __('Reading') }}</a></div>
+      <div class="nav__item"><a class="nav__link" href="#admins">{{ __('Admins') }}</a></div>
+      <div class="nav__item"><a class="nav__link" href="#questions">{{ __('Questions') }}</a></div>
     </nav>
     <div class="nav__actions">
+      <x-language-switcher class="nav__link" />
       @auth
-        <a class="nav__link" href="{{ route('my-books.index') }}">My books</a>
+        <a class="nav__link" href="{{ route('my-books.index') }}">{{ __('My books') }}</a>
       @else
-        <a class="nav__link" href="{{ route('login') }}">Sign in</a>
+        <a class="nav__link" href="{{ route('login') }}">{{ __('Sign in') }}</a>
       @endauth
-      <a class="btn btn--primary" href="{{ route('books.index') }}">Find a book</a>
+      <a class="btn btn--primary" href="{{ route('books.index') }}">{{ __('Find a book') }}</a>
     </div>
-    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="{{ __('Menu') }}">
       <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
     </button>
   </div>
@@ -195,20 +209,20 @@
   <section class="hero hero--centred" data-enter aria-labelledby="hero-h">
     <div class="wrap"><div class="hero-text">
       <div class="hero__c">
-        <a class="pill" href="{{ route('books.index') }}"><span>{{ $stats['books'] }} books in {{ $stats['categories'] }} categories</span><span class="muted">See the shelves</span></a>
-        <h1 id="hero-h" aria-label="A shared library of free PDF books"><span class="ly-mark" aria-hidden="true"></span> A shared library of free PDF books</h1>
-        <p class="hero__lead">Read online or download any book without an account. Members upload PDFs, and an admin checks each one before it goes public.</p>
+        <a class="pill" href="{{ route('books.index') }}"><span>{{ __(':books books in :categories categories', ['books' => $stats['books'], 'categories' => $stats['categories']]) }}</span><span class="muted">{{ __('See the shelves') }}</span></a>
+        <h1 id="hero-h" aria-label="{{ __('A shared library of free PDF books') }}"><span class="ly-mark" aria-hidden="true"></span> {{ __('A shared library of free PDF books') }}</h1>
+        <p class="hero__lead">{{ __('Read online or download any book without an account. Members upload PDFs, and an admin checks each one before it goes public.') }}</p>
         <div class="btn-row">
-          <a class="btn btn--primary" href="{{ route('books.index') }}">Find a book<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
-          <a class="btn btn--secondary" href="{{ route('my-books.create') }}">Submit a book</a>
+          <a class="btn btn--primary" href="{{ route('books.index') }}">{{ __('Find a book') }}<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+          <a class="btn btn--secondary" href="{{ route('my-books.create') }}">{{ __('Submit a book') }}</a>
         </div>
       </div>
-      <div class="hero__window" data-fx="silk-folds" data-fx-seed="7" role="img" aria-label="The BooksWeb library with {{ $openBook?->title ?? 'a book' }} open and its download buttons">
+      <div class="hero__window" data-fx="silk-folds" data-fx-seed="7" role="img" aria-label="{{ __('The BooksWeb library with :title open and its download buttons', ['title' => $openBook?->title ?? __('a book')]) }}">
         <div class="ly-piece lib-win ui" aria-hidden="true">
-          <div class="lib-win__bar"><span class="lib-win__dots"><i></i><i></i><i></i></span><span><b>Library</b> · Latest</span><span class="sp"></span><span>{{ $stats['books'] }} books</span></div>
+          <div class="lib-win__bar"><span class="lib-win__dots"><i></i><i></i><i></i></span><span><b>{{ __('Library') }}</b> · {{ __('Latest') }}</span><span class="sp"></span><span>{{ trans_choice(':count book|:count books', $stats['books']) }}</span></div>
           <div class="lib-win__body">
             <div class="lib-list">
-              <div class="q">Search title or author</div>
+              <div class="q">{{ __('Search title or author') }}</div>
               @foreach ($latestBooks->take(5) as $book)
                 @php([$from, $to] = $book->coverColors())
                 <div @class(['t', 'is-on' => $loop->first])><i style="background: linear-gradient(to bottom, {{ $to }}, {{ $from }} 60%)"></i><b>{{ $book->title }}</b><span>{{ $book->author }}</span></div>
@@ -220,14 +234,14 @@
                 <div class="lib-open__cover" style="background: linear-gradient(to bottom, {{ $from }} 55%, {{ $to }})">{{ $openBook->title }}<small>{{ $openBook->author }}</small></div>
                 <div class="lib-open__meta">
                   <h4>{{ $openBook->title }}</h4>
-                  <p>by {{ $openBook->author }}</p>
+                  <p>{{ __('by') }} {{ $openBook->author }}</p>
                   <div class="lib-facts" data-step>
                     @if ($openBook->category)<span>{{ $openBook->category->name }}</span>@endif
-                    @if ($openBook->pages)<span>{{ $openBook->pages }} pages</span>@endif
+                    @if ($openBook->pages)<span>{{ __(':count pages', ['count' => $openBook->pages]) }}</span>@endif
                     @if ($openBook->language)<span>{{ $openBook->language }}</span>@endif
                   </div>
-                  <p data-step>{{ Str::limit($openBook->description, 150) }}</p>
-                  <div class="lib-acts" data-step><span>Download PDF</span><span>Read online</span></div>
+                  <p data-step dir="auto">{{ Str::limit($openBook->description, 150) }}</p>
+                  <div class="lib-acts" data-step><span>{{ __('Download PDF') }}</span><span>{{ __('Read online') }}</span></div>
                 </div>
               </div>
             @endif
@@ -240,29 +254,29 @@
   <section class="section" id="review" aria-labelledby="review-h">
     <div class="wrap">
       <div class="grid">
-        <h2 class="span-5" id="review-h">A review queue for every upload</h2>
-        <p class="span-6 start-7">A member's book lands here as pending. An admin opens the PDF, checks the title and category, then approves it or rejects it with a reason. <a class="link" href="#steps">See the three steps</a></p>
+        <h2 class="span-5" id="review-h">{{ __('A review queue for every upload') }}</h2>
+        <p class="span-6 start-7">{{ __("A member's book lands here as pending. An admin opens the PDF, checks the title and category, then approves it or rejects it with a reason.") }} <a class="link" href="#steps">{{ __('See the three steps') }}</a></p>
       </div>
-      <div class="ui app fill" role="img" aria-label="The admin review queue with pending book requests beside the open request" data-ui-pause-host>
+      <div class="ui app fill" role="img" aria-label="{{ __('The admin review queue with pending book requests beside the open request') }}" data-ui-pause-host>
         <div class="app__pane app__pane--list">
-          <div class="ui ui-panel ui-win" data-ui="window" data-open="Pending" data-work="Reviewing" data-done="Approved">
+          <div class="ui ui-panel ui-win" data-ui="window" data-open="{{ __('Pending') }}" data-work="{{ __('Reviewing') }}" data-done="{{ __('Approved') }}">
             <div class="ui-win__bar">
               <span class="ui-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span class="ui-win__crumb">Requests <i>/</i> <b>Pending</b></span>
+              <span class="ui-win__crumb">{{ __('Requests') }} <i>/</i> <b>{{ __('Pending') }}</b></span>
               <span class="ui-spacer"></span>
-              <span class="ui-win__search" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg><span class="ui-win__ph">Search</span></span>
+              <span class="ui-win__search" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg><span class="ui-win__ph">{{ __('Search') }}</span></span>
             </div>
             <div class="ui-win__body">
               <nav class="ui-win__side" aria-hidden="true">
-                <span class="ui-win__nav is-on">Pending<em>{{ max($stats['pending'], 1) }}</em></span>
-                <span class="ui-win__nav">Approved<em>{{ $stats['books'] }}</em></span>
-                <span class="ui-win__nav">Rejected</span>
+                <span class="ui-win__nav is-on">{{ __('Pending') }}<em>{{ max($stats['pending'], 1) }}</em></span>
+                <span class="ui-win__nav">{{ __('Approved') }}<em>{{ $stats['books'] }}</em></span>
+                <span class="ui-win__nav">{{ __('Rejected') }}</span>
               </nav>
               <div class="ui-win__main">
-                <div class="ui-win__cols" aria-hidden="true"><span>Author</span><span>Book</span><span>Status</span><span>Age</span></div>
+                <div class="ui-win__cols" aria-hidden="true"><span>{{ __('Author') }}</span><span>{{ __('Book') }}</span><span>{{ __('Status') }}</span><span>{{ __('Age') }}</span></div>
                 <ul class="ui-win__rows">
                   @foreach ($queue as $book)
-                    <li class="ui-win__row" data-row><span class="ui-avatar" data-tone="{{ $loop->iteration % 5 + 1 }}">{{ $initials($book->author) }}</span><span class="ui-win__who">{{ $book->author }}</span><span class="ui-win__sub">{{ $book->title }}</span><span @class(['ui-win__st', 'is-done' => $loop->index >= 4]) data-st>{{ $loop->index < 4 ? 'Pending' : 'Approved' }}</span><span class="ui-win__age">{{ ($loop->index + 1) * 7 }}m</span></li>
+                    <li class="ui-win__row" data-row><span class="ui-avatar" data-tone="{{ $loop->iteration % 5 + 1 }}">{{ $initials($book->author) }}</span><span class="ui-win__who">{{ $book->author }}</span><span class="ui-win__sub">{{ $book->title }}</span><span @class(['ui-win__st', 'is-done' => $loop->index >= 4]) data-st>{{ $loop->index < 4 ? __('Pending') : __('Approved') }}</span><span class="ui-win__age">{{ __(':countm', ['count' => ($loop->index + 1) * 7]) }}</span></li>
                   @endforeach
                 </ul>
               </div>
@@ -272,16 +286,16 @@
         <div class="app__pane app__pane--open" data-ui-loop>
           <div class="ui ui-doc" data-ui="doc">
             <article class="ui-doc__page">
-              <div class="ui-doc__label">Request from a member · PDF attached</div>
-              <div class="ui-doc__title">{{ $openBook?->title ?? 'New book' }}, {{ $openBook?->author }}</div>
-              <div class="ui-doc__text">Category <mark class="ui-doc__mark is-on">{{ $openBook?->category?->name ?? 'Not set' }}</mark>, {{ $openBook?->pages ?? 'unknown' }} pages, written in {{ $openBook?->language ?? 'English' }}.</div>
-              <div class="ui-doc__text">{{ Str::limit($openBook?->description ?? '', 180) }}</div>
-              <div class="ui-doc__text">The member can edit a rejected request and <mark class="ui-doc__mark" data-kind="Rule" data-msg="Any edit sends the request back to pending." data-where="Member's book page">send it again</mark> for review.</div>
+              <div class="ui-doc__label">{{ __('Request from a member · PDF attached') }}</div>
+              <div class="ui-doc__title">{{ $openBook?->title ?? __('New book') }}{{ __(', ') }}{{ $openBook?->author }}</div>
+              <div class="ui-doc__text">{{ __('Category') }} <mark class="ui-doc__mark is-on">{{ $openBook?->category?->name ?? __('Not set') }}</mark>{{ __(', ') }}{{ __(':count pages', ['count' => $openBook?->pages ?? __('unknown')]) }}{{ __(', ') }}{{ __('written in :language', ['language' => $openBook?->language ?? __('English')]) }}.</div>
+              <div class="ui-doc__text" dir="auto">{{ Str::limit($openBook?->description ?? '', 180) }}</div>
+              <div class="ui-doc__text">{{ __('The member can edit a rejected request and') }} <mark class="ui-doc__mark" data-kind="{{ __('Rule') }}" data-msg="{{ __('Any edit sends the request back to pending.') }}" data-where="{{ __("Member's book page") }}">{{ __('send it again') }}</mark> {{ __('for review.') }}</div>
             </article>
             <aside class="ui-doc__note ui-panel is-on" aria-live="polite">
-              <div class="ui-doc__kind"><span class="ui-doc__dot"></span><span data-doc-kind>Check</span></div>
-              <div class="ui-doc__msg" data-doc-msg>Category matches the book. Ready to approve.</div>
-              <div class="ui-doc__where" data-doc-where>Admin review</div>
+              <div class="ui-doc__kind"><span class="ui-doc__dot"></span><span data-doc-kind>{{ __('Check') }}</span></div>
+              <div class="ui-doc__msg" data-doc-msg>{{ __('Category matches the book. Ready to approve.') }}</div>
+              <div class="ui-doc__where" data-doc-where>{{ __('Admin review') }}</div>
             </aside>
           </div>
         </div>
@@ -292,24 +306,24 @@
   <section class="section" id="steps" style="--hm: 2" aria-labelledby="steps-h">
     <div class="wrap">
       <div class="section-head">
-        <h2 id="steps-h">A book goes public in 3 steps</h2>
+        <h2 id="steps-h">{{ __('A book goes public in 3 steps') }}</h2>
       </div>
       <div class="grid fill">
         <article class="card card--row card--open span-4">
           <span class="step-num">1</span>
-          <h3>Upload the PDF</h3>
-          <p>Add the title, author and category, then attach the PDF and a cover if you have one.</p>
+          <h3>{{ __('Upload the PDF') }}</h3>
+          <p>{{ __('Add the title, author and category, then attach the PDF and a cover if you have one.') }}</p>
           <div class="panel" data-fx="fluted-glass" data-fx-seed="21" data-fx-params='{"drift":0}'>
             <div class="stage stage--fade-b"><div class="at-rise fit" style="--fit-max:320px;--ax:max(24px, 50% - 160px);--ay:40px;--ay-sm:24px" data-ui-loop>
               <div class="ui ui-panel ui-checks" data-ui="checklist">
-                <div class="ui-checks__head"><div class="ui-title">Submit a book</div><span class="ui-spacer"></span><div class="ui-meta" data-checks-count>2 of 5</div></div>
+                <div class="ui-checks__head"><div class="ui-title">{{ __('Submit a book') }}</div><span class="ui-spacer"></span><div class="ui-meta" data-checks-count>{{ __(':done of :total', ['done' => 2, 'total' => 5]) }}</div></div>
                 <div class="ui-checks__bar"><i data-checks-bar style="--k:0.4"></i></div>
                 <ul class="ui-checks__list">
-                  <li class="ui-check is-done"><span class="ui-check__box"><svg viewBox="0 0 16 16"><path d="m4.5 8.2 2.3 2.3 4.7-5"/></svg></span><span class="ui-check__label">Title and author</span></li>
-                  <li class="ui-check is-done"><span class="ui-check__box"><svg viewBox="0 0 16 16"><path d="m4.5 8.2 2.3 2.3 4.7-5"/></svg></span><span class="ui-check__label">Category</span></li>
-                  <li class="ui-check"><span class="ui-check__box"><svg viewBox="0 0 16 16"><path d="m4.5 8.2 2.3 2.3 4.7-5"/></svg></span><span class="ui-check__label">Description</span></li>
-                  <li class="ui-check"><span class="ui-check__box"><svg viewBox="0 0 16 16"><path d="m4.5 8.2 2.3 2.3 4.7-5"/></svg></span><span class="ui-check__label">PDF file, up to 50 MB</span></li>
-                  <li class="ui-check"><span class="ui-check__box"><svg viewBox="0 0 16 16"><path d="m4.5 8.2 2.3 2.3 4.7-5"/></svg></span><span class="ui-check__label">Cover image</span></li>
+                  <li class="ui-check is-done"><span class="ui-check__box"><svg viewBox="0 0 16 16"><path d="m4.5 8.2 2.3 2.3 4.7-5"/></svg></span><span class="ui-check__label">{{ __('Title and author') }}</span></li>
+                  <li class="ui-check is-done"><span class="ui-check__box"><svg viewBox="0 0 16 16"><path d="m4.5 8.2 2.3 2.3 4.7-5"/></svg></span><span class="ui-check__label">{{ __('Category') }}</span></li>
+                  <li class="ui-check"><span class="ui-check__box"><svg viewBox="0 0 16 16"><path d="m4.5 8.2 2.3 2.3 4.7-5"/></svg></span><span class="ui-check__label">{{ __('Description') }}</span></li>
+                  <li class="ui-check"><span class="ui-check__box"><svg viewBox="0 0 16 16"><path d="m4.5 8.2 2.3 2.3 4.7-5"/></svg></span><span class="ui-check__label">{{ __('PDF file, up to 50 MB') }}</span></li>
+                  <li class="ui-check"><span class="ui-check__box"><svg viewBox="0 0 16 16"><path d="m4.5 8.2 2.3 2.3 4.7-5"/></svg></span><span class="ui-check__label">{{ __('Cover image') }}</span></li>
                 </ul>
               </div>
             </div></div>
@@ -317,15 +331,15 @@
         </article>
         <article class="card card--row card--open span-4">
           <span class="step-num">2</span>
-          <h3>An admin reviews it</h3>
-          <p>You see the decision on your books page. A rejection comes with a reason you can fix.</p>
+          <h3>{{ __('An admin reviews it') }}</h3>
+          <p>{{ __('You see the decision on your books page. A rejection comes with a reason you can fix.') }}</p>
           <div class="panel" data-fx="fluted-glass" data-fx-seed="34" data-fx-params='{"drift":0}'>
             <div class="stage stage--fade-b"><div class="at-rise fit" style="--fit-max:320px;--ax:max(24px, 50% - 160px);--ay:40px;--ay-sm:24px">
               <div class="ui ui-notify" data-ui="notify">
                 <ul class="ui-notify__list" data-notify-list>
-                  <li class="ui-note"><span class="ui-note__ico"><svg class="ui-icon" viewBox="0 0 16 16"><path d="m3.5 8.4 2.8 2.8 6.2-6.4"/></svg></span><span class="ui-note__text"><span class="ui-note__title">Request approved<time>now</time></span><span class="ui-note__body">{{ $queue->get(1)?->title ?? 'Your book' }} is public</span></span></li>
-                  <li class="ui-note"><span class="ui-note__ico"><svg class="ui-icon" viewBox="0 0 16 16"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg></span><span class="ui-note__text"><span class="ui-note__title">Request rejected<time>2h</time></span><span class="ui-note__body">Reason: pages 40 to 52 are missing</span></span></li>
-                  <li class="ui-note"><span class="ui-note__ico"><svg class="ui-icon" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><path d="M8 5v3l2 1.5"/></svg></span><span class="ui-note__text"><span class="ui-note__title">Sent for review<time>1d</time></span><span class="ui-note__body">Edited request back to pending</span></span></li>
+                  <li class="ui-note"><span class="ui-note__ico"><svg class="ui-icon" viewBox="0 0 16 16"><path d="m3.5 8.4 2.8 2.8 6.2-6.4"/></svg></span><span class="ui-note__text"><span class="ui-note__title">{{ __('Request approved') }}<time>{{ __('now') }}</time></span><span class="ui-note__body">{{ __(':title is public', ['title' => $queue->get(1)?->title ?? __('Your book')]) }}</span></span></li>
+                  <li class="ui-note"><span class="ui-note__ico"><svg class="ui-icon" viewBox="0 0 16 16"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg></span><span class="ui-note__text"><span class="ui-note__title">{{ __('Request rejected') }}<time>{{ __(':counth', ['count' => 2]) }}</time></span><span class="ui-note__body">{{ __('Reason: pages 40 to 52 are missing') }}</span></span></li>
+                  <li class="ui-note"><span class="ui-note__ico"><svg class="ui-icon" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><path d="M8 5v3l2 1.5"/></svg></span><span class="ui-note__text"><span class="ui-note__title">{{ __('Sent for review') }}<time>{{ __(':countd', ['count' => 1]) }}</time></span><span class="ui-note__body">{{ __('Edited request back to pending') }}</span></span></li>
                 </ul>
               </div>
             </div></div>
@@ -333,8 +347,8 @@
         </article>
         <article class="card card--row card--open span-4">
           <span class="step-num">3</span>
-          <h3>Readers find it</h3>
-          <p>The book shows in search, in its category and on the home page as newly added.</p>
+          <h3>{{ __('Readers find it') }}</h3>
+          <p>{{ __('The book shows in search, in its category and on the home page as newly added.') }}</p>
           <div class="panel" data-fx="fluted-glass" data-fx-seed="58" data-fx-params='{"drift":0}'>
             <div class="stage stage--fade-b"><div class="at-rise fit" style="--fit-max:320px;--ax:max(24px, 50% - 160px);--ay:40px;--ay-sm:24px">
               <div class="ui ui-panel ui-search" data-ui="search">
@@ -342,7 +356,7 @@
                   <svg class="ui-icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg>
                   <span class="ui-search__q"><span data-search-q>{{ Str::lower(Str::words($queue->get(1)?->title ?? 'habits', 1, '')) }}</span><i class="ui-search__caret"></i></span>
                 </div>
-                <div class="ui-search__group">Books</div>
+                <div class="ui-search__group">{{ __('Books') }}</div>
                 <ul class="ui-search__list" data-search-list>
                   @foreach ($queue->take(3) as $book)
                     <li @class(['ui-search__row', 'is-sel' => $loop->first])><span class="ui-search__ico"><svg class="ui-icon" viewBox="0 0 16 16"><path d="M4 2.5h5l3 3v8H4z"/><path d="M9 2.5v3h3"/></svg></span><span class="ui-search__t">{{ Str::limit($book->title, 24) }}</span><span class="ui-search__m">PDF</span></li>
@@ -360,17 +374,17 @@
     <div class="wrap">
       <div class="grid">
         <div class="span-5 stack-4">
-          <h2 id="questions-h">Questions</h2>
-          <p>What members ask before their first upload.</p>
-          <a class="link" href="{{ route('sign_up') }}">Create a free account</a>
+          <h2 id="questions-h">{{ __('Questions') }}</h2>
+          <p>{{ __('What members ask before their first upload.') }}</p>
+          <a class="link" href="{{ route('sign_up') }}">{{ __('Create a free account') }}</a>
         </div>
         <div class="faq span-6 start-7">
-          <div class="faq__item"><h3>Do I need an account to read a book?</h3><p>No. Anyone can open or download a published book. You only sign up to upload.</p></div>
-          <div class="faq__item"><h3>Which book files can I upload?</h3><p>The book as one PDF of up to 50 MB, and a cover as JPG, PNG or WEBP of up to 4 MB.</p></div>
-          <div class="faq__item"><h3>Who sees my book while it is pending?</h3><p>Only you and the admins. It joins the library on the day an admin approves it.</p></div>
-          <div class="faq__item"><h3>What happens to a rejected book?</h3><p>The reason shows on your books page. Fix the request and save it; it goes back to pending.</p></div>
-          <div class="faq__item"><h3>Can I change a book after approval?</h3><p>Only an admin can. You can still delete your own book from your books page.</p></div>
-          <div class="faq__item"><h3>How many books can I submit?</h3><p>There is no limit. Each book is its own request and is reviewed on its own.</p></div>
+          <div class="faq__item"><h3>{{ __('Do I need an account to read a book?') }}</h3><p>{{ __('No. Anyone can open or download a published book. You only sign up to upload.') }}</p></div>
+          <div class="faq__item"><h3>{{ __('Which book files can I upload?') }}</h3><p>{{ __('The book as one PDF of up to 50 MB, and a cover as JPG, PNG or WEBP of up to 4 MB.') }}</p></div>
+          <div class="faq__item"><h3>{{ __('Who sees my book while it is pending?') }}</h3><p>{{ __('Only you and the admins. It joins the library on the day an admin approves it.') }}</p></div>
+          <div class="faq__item"><h3>{{ __('What happens to a rejected book?') }}</h3><p>{{ __('The reason shows on your books page. Fix the request and save it; it goes back to pending.') }}</p></div>
+          <div class="faq__item"><h3>{{ __('Can I change a book after approval?') }}</h3><p>{{ __('Only an admin can. You can still delete your own book from your books page.') }}</p></div>
+          <div class="faq__item"><h3>{{ __('How many books can I submit?') }}</h3><p>{{ __('There is no limit. Each book is its own request and is reviewed on its own.') }}</p></div>
         </div>
       </div>
     </div>
@@ -379,17 +393,17 @@
     <div class="wrap">
       <div class="grid fill">
         <div class="span-5 stack-6">
-          <h2 id="reading-h">Read in the browser or keep the PDF</h2>
-          <p class="t-lead">Every book page has two buttons. Read online opens the PDF in a new tab; Download saves it under the book's title.</p>
+          <h2 id="reading-h">{{ __('Read in the browser or keep the PDF') }}</h2>
+          <p class="t-lead">{{ __("Every book page has two buttons. Read online opens the PDF in a new tab; Download saves it under the book's title.") }}</p>
           <ul class="stack-3">
-            <li>No account needed to read or download</li>
-            <li>A download count on every book</li>
-            <li>A drawn cover for books uploaded without one</li>
+            <li>{{ __('No account needed to read or download') }}</li>
+            <li>{{ __('A download count on every book') }}</li>
+            <li>{{ __('A drawn cover for books uploaded without one') }}</li>
           </ul>
-          <a class="link" href="{{ route('books.index') }}">See the newest books</a>
+          <a class="link" href="{{ route('books.index') }}">{{ __('See the newest books') }}</a>
         </div>
         <div class="frame frame--split frame--photo span-6 start-7">
-          <img class="frame__img" src="{{ $kit('img/photo-f195053383-960.jpg') }}" srcset="{{ $kit('img/photo-f195053383-500.jpg') }} 500w, {{ $kit('img/photo-f195053383-960.jpg') }} 960w" sizes="(max-width: 639px) 100vw, 960px" width="960" height="722" alt="A reading corner with full bookshelves, a small round table and chairs on a rug" loading="lazy" decoding="async" data-source="stand-in" data-subject="reading room">
+          <img class="frame__img" src="{{ $kit('img/photo-f195053383-960.jpg') }}" srcset="{{ $kit('img/photo-f195053383-500.jpg') }} 500w, {{ $kit('img/photo-f195053383-960.jpg') }} 960w" sizes="(max-width: 639px) 100vw, 960px" width="960" height="722" alt="{{ __('A reading corner with full bookshelves, a small round table and chairs on a rug') }}" loading="lazy" decoding="async" data-source="stand-in" data-subject="reading room">
         </div>
       </div>
     </div>
@@ -399,22 +413,22 @@
     <div class="wrap">
       <div class="grid fill">
         <div class="span-5 stack-6">
-          <h2 id="admins-h">Admin panel for books, categories and members</h2>
-          <p class="t-lead">Admins sign in on their own page. A book they upload is public at once; they also rename categories and remove members.</p>
-          <a class="link" href="{{ route('admin.login') }}">Open the admin sign-in</a>
+          <h2 id="admins-h">{{ __('Admin panel for books, categories and members') }}</h2>
+          <p class="t-lead">{{ __('Admins sign in on their own page. A book they upload is public at once; they also rename categories and remove members.') }}</p>
+          <a class="link" href="{{ route('admin.login') }}">{{ __('Open the admin sign-in') }}</a>
         </div>
         <div class="span-6 start-7">
-          <div class="adm ui" role="img" aria-label="The admin dashboard with today's library numbers">
-            <div class="adm__bar"><b>Dashboard</b><span>· BooksWeb admin</span></div>
+          <div class="adm ui" role="img" aria-label="{{ __("The admin dashboard with today's library numbers") }}">
+            <div class="adm__bar"><b>{{ __('Dashboard') }}</b><span>· {{ __('BooksWeb admin') }}</span></div>
             <div class="adm__grid">
-              <div><span>Published books</span><strong>{{ number_format($stats['books']) }}</strong></div>
-              <div><span>Pending requests</span><strong>{{ number_format($stats['pending']) }}</strong></div>
-              <div><span>Members</span><strong>{{ number_format($stats['members']) }}</strong></div>
-              <div><span>Downloads</span><strong>{{ number_format($stats['downloads']) }}</strong></div>
+              <div><span>{{ __('Published books') }}</span><strong>{{ number_format($stats['books']) }}</strong></div>
+              <div><span>{{ __('Pending requests') }}</span><strong>{{ number_format($stats['pending']) }}</strong></div>
+              <div><span>{{ __('Members') }}</span><strong>{{ number_format($stats['members']) }}</strong></div>
+              <div><span>{{ __('Downloads') }}</span><strong>{{ number_format($stats['downloads']) }}</strong></div>
             </div>
             <div class="adm__rows">
               @foreach ($categories->take(8) as $category)
-                <p><span>{{ $category->name }}</span><em>{{ $category->books_count }} {{ Str::plural('book', $category->books_count) }}</em></p>
+                <p><span>{{ $category->name }}</span><em>{{ trans_choice(':count book|:count books', $category->books_count) }}</em></p>
               @endforeach
             </div>
           </div>
@@ -429,8 +443,8 @@
   <div class="wrap">
     <div class="closing__cta close--word">
       <div class="section-head--split">
-        <div><h2 id="close-h">Find your next book</h2><p class="t-lead">{{ $stats['books'] }} books, free to read and download.</p></div>
-        <a class="btn btn--primary" href="{{ route('books.index') }}">Find a book<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+        <div><h2 id="close-h">{{ __('Find your next book') }}</h2><p class="t-lead">{{ __(':count books, free to read and download.', ['count' => $stats['books']]) }}</p></div>
+        <a class="btn btn--primary" href="{{ route('books.index') }}">{{ __('Find a book') }}<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
       </div>
       <p class="close__word" aria-hidden="true">BooksWeb</p>
     </div>
@@ -438,17 +452,17 @@
       <div class="grid">
         <div class="span-4 stack-4">
           <a class="nav__logo" href="#top"><span class="mark" data-mark="dots" aria-hidden="true"></span>BooksWeb</a>
-          <p class="footer__lede">A PDF library its members fill.</p>
+          <p class="footer__lede">{{ __('A PDF library its members fill.') }}</p>
         </div>
-        <div class="span-2 footer__col"><h3>Library</h3><ul><li><a href="{{ route('books.index') }}">All books</a></li><li><a href="#reading">Reading</a></li></ul></div>
-        <div class="span-2 footer__col"><h3>Members</h3><ul><li><a href="{{ route('sign_up') }}">Sign up</a></li><li><a href="{{ route('login') }}">Sign in</a></li></ul></div>
-        <div class="span-2 footer__col"><h3>Uploads</h3><ul><li><a href="#steps">Steps</a></li><li><a href="#review">Review</a></li></ul></div>
-        <div class="span-2 footer__col"><h3>Admins</h3><ul><li><a href="#admins">Admin panel</a></li><li><a href="#questions">Questions</a></li></ul></div>
+        <div class="span-2 footer__col"><h3>{{ __('Library') }}</h3><ul><li><a href="{{ route('books.index') }}">{{ __('All books') }}</a></li><li><a href="#reading">{{ __('Reading') }}</a></li></ul></div>
+        <div class="span-2 footer__col"><h3>{{ __('Members') }}</h3><ul><li><a href="{{ route('sign_up') }}">{{ __('Sign up') }}</a></li><li><a href="{{ route('login') }}">{{ __('Sign in') }}</a></li></ul></div>
+        <div class="span-2 footer__col"><h3>{{ __('Uploads') }}</h3><ul><li><a href="#steps">{{ __('Steps') }}</a></li><li><a href="#review">{{ __('Review') }}</a></li></ul></div>
+        <div class="span-2 footer__col"><h3>{{ __('Admins') }}</h3><ul><li><a href="#admins">{{ __('Admin panel') }}</a></li><li><a href="#questions">{{ __('Questions') }}</a></li></ul></div>
       </div>
       <div class="footer__legal">
         <span>&copy; {{ date('Y') }} BooksWeb</span>
-        <div class="socials"></div>
-        <a class="credits" href="{{ asset('credits.html') }}">Photographs via Wikimedia Commons</a>
+        <x-language-switcher />
+        <a class="credits" href="{{ asset('credits.html') }}">{{ __('Photographs via Wikimedia Commons') }}</a>
       </div>
     </div>
   </div>

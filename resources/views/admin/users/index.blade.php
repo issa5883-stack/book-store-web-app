@@ -1,23 +1,23 @@
 @extends('layouts.admin')
 
-@section('title', 'Users')
+@section('title', __('Users'))
 
 @section('content')
     <form action="{{ route('admin.users.index') }}" method="GET" class="toolbar">
         <div class="search">
             <x-icon name="search" />
-            <input type="text" name="search" class="input" placeholder="Search by name or email…" value="{{ request('search') }}">
+            <input type="text" name="search" class="input" placeholder="{{ __('Search by name or email…') }}" value="{{ request('search') }}">
         </div>
-        <button class="btn btn-primary" type="submit">Search</button>
+        <button class="btn btn-primary" type="submit">{{ __('Search') }}</button>
     </form>
 
     <div class="card">
         @if ($users->isEmpty())
-            <x-empty-state icon="users" title="No users found" />
+            <x-empty-state icon="users" :title="__('No users found')" />
         @else
             <div class="table-wrap">
                 <table class="table">
-                    <thead><tr><th>User</th><th>Submitted</th><th>Published</th><th>Pending</th><th>Joined</th><th></th></tr></thead>
+                    <thead><tr><th>{{ __('User') }}</th><th>{{ __('Submitted') }}</th><th>{{ __('Published') }}</th><th>{{ __('Pending') }}</th><th>{{ __('Joined') }}</th><th></th></tr></thead>
                     <tbody>
                         @foreach ($users as $user)
                             <tr>
@@ -30,13 +30,13 @@
                                 <td>{{ $user->books_count }}</td>
                                 <td><span class="badge badge-approved">{{ $user->approved_books_count }}</span></td>
                                 <td><span class="badge badge-pending">{{ $user->pending_books_count }}</span></td>
-                                <td class="muted">{{ $user->created_at->format('M d, Y') }}</td>
+                                <td class="muted">{{ $user->created_at->translatedFormat('M d, Y') }}</td>
                                 <td>
                                     <div class="actions">
-                                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST" data-confirm="Delete {{ $user->name }} and all of their books?">
+                                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST" data-confirm="{{ __('Delete :name and all of their books?', ['name' => $user->name]) }}">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger-soft btn-sm btn-icon" title="Delete"><x-icon name="trash" /></button>
+                                            <button type="submit" class="btn btn-danger-soft btn-sm btn-icon" title="{{ __('Delete') }}"><x-icon name="trash" /></button>
                                         </form>
                                     </div>
                                 </td>

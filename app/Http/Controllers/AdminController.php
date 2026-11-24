@@ -41,7 +41,7 @@ class AdminController extends Controller
             return redirect()->route('admin.dashboard');
         }
 
-        return back()->withErrors(['email' => 'Email or password is wrong.'])->onlyInput('email');
+        return back()->withErrors(['email' => __('Email or password is wrong.')])->onlyInput('email');
     }
 
     public function logout(Request $request): RedirectResponse
@@ -49,7 +49,7 @@ class AdminController extends Controller
         session()->forget('admin_id');
         $request->session()->regenerate();
 
-        return redirect()->route('admin.login')->with('success', 'You have been signed out.');
+        return redirect()->route('admin.login')->with('success', __('You have been signed out.'));
     }
 
     public function dashboard(): View

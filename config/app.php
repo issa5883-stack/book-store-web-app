@@ -85,6 +85,16 @@ return [
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 
     /*
+    | Languages a visitor can switch between, with their native name and
+    | text direction. The language switcher and SetLocale middleware use it.
+    */
+
+    'supported_locales' => [
+        'en' => ['name' => 'English', 'dir' => 'ltr'],
+        'ar' => ['name' => 'العربية', 'dir' => 'rtl'],
+    ],
+
+    /*
     |--------------------------------------------------------------------------
     | Encryption Key
     |--------------------------------------------------------------------------

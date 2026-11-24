@@ -7,8 +7,14 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\UserBookController;
 use Illuminate\Support\Facades\Route;
+
+/*
+| Language switcher (English / Arabic)
+*/
+Route::get('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
 
 /*
 | Public library (approved books only)

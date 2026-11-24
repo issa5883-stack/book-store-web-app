@@ -134,7 +134,7 @@ class Book extends Model
             return $this->user->name;
         }
 
-        return $this->admin ? $this->admin->name.' (Admin)' : 'Admin';
+        return $this->admin ? $this->admin->name.' ('.__('Admin').')' : __('Admin');
     }
 
     /**

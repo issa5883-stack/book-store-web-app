@@ -10,7 +10,7 @@
     <div class="alert alert-error">
         <x-icon name="alert" />
         <div>
-            <strong>Please fix the following:</strong>
+            <strong>{{ __('Please fix the following:') }}</strong>
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>

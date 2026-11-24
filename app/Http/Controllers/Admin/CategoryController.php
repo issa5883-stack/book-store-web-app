@@ -27,7 +27,7 @@ class CategoryController extends Controller
 
         Category::create(['name' => $data['name'], 'slug' => Str::slug($data['name'])]);
 
-        return back()->with('success', 'Category added.');
+        return back()->with('success', __('Category added.'));
     }
 
     public function update(Request $request, Category $category): RedirectResponse
@@ -38,13 +38,13 @@ class CategoryController extends Controller
 
         $category->update(['name' => $data['name'], 'slug' => Str::slug($data['name'])]);
 
-        return back()->with('success', 'Category updated.');
+        return back()->with('success', __('Category updated.'));
     }
 
     public function destroy(Category $category): RedirectResponse
     {
         $category->delete(); // books keep existing, their category becomes null
 
-        return back()->with('success', 'Category deleted.');
+        return back()->with('success', __('Category deleted.'));
     }
 }

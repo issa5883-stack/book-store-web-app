@@ -35,6 +35,6 @@ class UserController extends Controller
 
         $user->delete(); // the user's books are removed by the cascading foreign key
 
-        return back()->with('success', 'User deleted.');
+        return back()->with('success', __('User deleted.'));
     }
 }

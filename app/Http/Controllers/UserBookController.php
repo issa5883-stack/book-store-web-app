@@ -49,7 +49,7 @@ class UserBookController extends Controller
         $request->user()->books()->create($data);
 
         return redirect()->route('my-books.index')
-            ->with('success', 'Your book was submitted and is waiting for admin approval.');
+            ->with('success', __('Your book was submitted and is waiting for admin approval.'));
     }
 
     public function edit(Request $request, Book $book): View
@@ -73,7 +73,7 @@ class UserBookController extends Controller
         $book->update($data);
 
         return redirect()->route('my-books.index')
-            ->with('success', 'Your request was updated and sent for review again.');
+            ->with('success', __('Your request was updated and sent for review again.'));
     }
 
     public function destroy(Request $request, Book $book): RedirectResponse
@@ -83,7 +83,7 @@ class UserBookController extends Controller
         $book->deleteFiles();
         $book->delete();
 
-        return redirect()->route('my-books.index')->with('success', 'Book deleted.');
+        return redirect()->route('my-books.index')->with('success', __('Book deleted.'));
     }
 
     /**
@@ -92,6 +92,6 @@ class UserBookController extends Controller
     private function ensureEditable(Request $request, Book $book): void
     {
         abort_unless($book->user_id === $request->user()->id, 403);
-        abort_if($book->isApproved(), 403, 'Approved books can only be changed by an admin.');
+        abort_if($book->isApproved(), 403, __('Approved books can only be changed by an admin.'));
     }
 }

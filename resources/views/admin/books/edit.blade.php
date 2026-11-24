@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit book')
+@section('title', __('Edit book'))
 
 @section('actions')
     <x-status-badge :status="$book->status" />
@@ -13,8 +13,8 @@
             @method('PUT')
             @include('partials.book-form-fields', ['book' => $book])
             <div class="form-actions">
-                <a href="{{ route('admin.books.index') }}" class="btn btn-light">Cancel</a>
-                <button type="submit" class="btn btn-primary"><x-icon name="check" /> Save changes</button>
+                <a href="{{ route('admin.books.index') }}" class="btn btn-light">{{ __('Cancel') }}</a>
+                <button type="submit" class="btn btn-primary"><x-icon name="check" /> {{ __('Save changes') }}</button>
             </div>
         </form>
     </div>
