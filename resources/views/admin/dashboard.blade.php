@@ -9,7 +9,7 @@
 @section('content')
     <div class="welcome">
         <div>
-            <h2>{{ __('Welcome back, :name', ['name' => $currentAdmin->name]) }} 👋</h2>
+            <h2>{{ __('Welcome back, :name', ['name' => $currentAdmin->name]) }} </h2>
             <p>
                 @if ($stats['pending'])
                     {!! trans_choice('You have <strong>:count</strong> book request waiting for review.|You have <strong>:count</strong> book requests waiting for review.', $stats['pending']) !!}
