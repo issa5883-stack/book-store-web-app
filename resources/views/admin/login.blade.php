@@ -1,32 +1,30 @@
-@extends('layouts.auth', ['isAdmin' => true])
+@extends('layouts.auth')
 
 @section('title', __('Admin sign in'))
 
-@section('side')
-    <span class="eyebrow"><x-icon name="shield" /> {{ __('Control panel') }}</span>
-    <h2>{{ __('Manage the library with confidence.') }}</h2>
-    <p>{{ __('Upload books directly, review user requests, organise categories and manage members.') }}</p>
-@endsection
-
 @section('content')
-    <span class="chip" style="margin-bottom: 1rem;"><x-icon name="shield" /> {{ __('Administrators only') }}</span>
-    <h1>{{ __('Admin sign in') }}</h1>
-    <p>{{ __('Use your administrator credentials.') }}</p>
+    <div class="auth-head">
+        <span class="auth-badge"><x-icon name="shield" /> {{ __('Administrators only') }}</span>
+        <h1>{{ __('Admin sign in') }}</h1>
+        <p>{{ __('Use your administrator credentials.') }}</p>
+    </div>
 
-    <x-flash />
+    <x-flash :show-errors="false" />
 
-    <form action="{{ route('adminlogin.submit') }}" method="POST">
+    <form action="{{ route('adminlogin.submit') }}" method="POST" data-loading>
         @csrf
-        <div class="field">
-            <label for="email">{{ __('Email address') }}</label>
-            <input type="email" id="email" name="email" class="input" value="{{ old('email') }}" placeholder="admin@example.com" dir="ltr" required autofocus>
-        </div>
-        <div class="field">
-            <label for="password">{{ __('Password') }}</label>
-            <input type="password" id="password" name="password" class="input" placeholder="••••••••" required>
-        </div>
-        <button type="submit" class="btn btn-primary btn-lg btn-block"><x-icon name="login" /> {{ __('Sign in to dashboard') }}</button>
+        <x-auth-field name="email" type="email" :label="__('Email address')"
+                      placeholder="admin@example.com" dir="ltr" autocomplete="username" inputmode="email" required autofocus />
+        <x-auth-field name="password" type="password" :label="__('Password')"
+                      placeholder="••••••••" autocomplete="current-password" required />
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block">
+            <span class="btn-spinner" aria-hidden="true"></span>
+            <span class="btn-label">{{ __('Sign in to dashboard') }}</span>
+        </button>
     </form>
 
-    <p class="auth-foot"><a href="{{ route('home') }}" class="muted"><x-icon name="arrow-left" class="flip-rtl" /> {{ __('Back to website') }}</a></p>
+    <div class="auth-divider"><span>{{ __('or') }}</span></div>
+
+    <p class="auth-switch"><a href="{{ route('home') }}" class="auth-link">{{ __('Back to website') }}</a></p>
 @endsection

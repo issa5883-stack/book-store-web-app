@@ -2,35 +2,35 @@
 
 @section('title', __('Sign in'))
 
-@section('side')
-    <h2>{{ __('Welcome back to your library.') }}</h2>
-    <p>{{ __('Sign in to upload books, follow the status of your requests and build the library together.') }}</p>
-    <ul>
-        <li><x-icon name="check-circle" /> {{ __('Upload books in PDF format') }}</li>
-        <li><x-icon name="check-circle" /> {{ __('Track every request you submit') }}</li>
-        <li><x-icon name="check-circle" /> {{ __('Download thousands of books for free') }}</li>
-    </ul>
-@endsection
-
 @section('content')
-    <h1>{{ __('Sign in') }}</h1>
-    <p>{{ __('Enter your details to access your account.') }}</p>
+    <div class="auth-head">
+        <h1>{{ __('Welcome back') }}</h1>
+        <p>{{ __('Sign in to continue to your library.') }}</p>
+    </div>
 
-    <x-flash />
+    <x-flash :show-errors="false" />
 
-    <form action="{{ route('login.submit') }}" method="POST">
+    <form action="{{ route('login.submit') }}" method="POST" data-loading>
         @csrf
-        <div class="field">
-            <label for="email">{{ __('Email address') }}</label>
-            <input type="email" id="email" name="email" class="input" value="{{ old('email') }}" placeholder="you@example.com" dir="ltr" required autofocus>
+        <x-auth-field name="email" type="email" :label="__('Email address')"
+                      placeholder="you@example.com" dir="ltr" autocomplete="email" inputmode="email" required autofocus />
+        <x-auth-field name="password" type="password" :label="__('Password')"
+                      placeholder="••••••••" autocomplete="current-password" required />
+
+        <div class="auth-row">
+            <label class="check"><input type="checkbox" name="remember" value="1" @checked(old('remember'))> {{ __('Remember me') }}</label>
+            @if (Route::has('password.request'))
+                <a href="{{ route('password.request') }}" class="auth-link">{{ __('Forgot password?') }}</a>
+            @endif
         </div>
-        <div class="field">
-            <label for="password">{{ __('Password') }}</label>
-            <input type="password" id="password" name="password" class="input" placeholder="••••••••" required>
-        </div>
-        <label class="check"><input type="checkbox" name="remember" value="1"> {{ __('Remember me') }}</label>
-        <button type="submit" class="btn btn-primary btn-lg btn-block"><x-icon name="login" /> {{ __('Sign in') }}</button>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block">
+            <span class="btn-spinner" aria-hidden="true"></span>
+            <span class="btn-label">{{ __('Sign in') }}</span>
+        </button>
     </form>
 
-    <p class="auth-foot">{{ __('No account yet?') }} <a href="{{ route('sign_up') }}"><strong>{{ __('Create one') }}</strong></a></p>
+    <div class="auth-divider"><span>{{ __('or') }}</span></div>
+
+    <p class="auth-switch">{{ __('New to BooksWeb?') }} <a href="{{ route('sign_up') }}" class="auth-link">{{ __('Create an account') }}</a></p>
 @endsection

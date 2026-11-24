@@ -1,3 +1,6 @@
+{{-- Pass :show-errors="false" when the form shows each validation error under its own field. --}}
+@props(['showErrors' => true])
+
 @if (session('success'))
     <div class="alert alert-success"><x-icon name="check-circle" /> <div>{{ session('success') }}</div></div>
 @endif
@@ -6,7 +9,7 @@
     <div class="alert alert-error"><x-icon name="alert" /> <div>{{ session('error') }}</div></div>
 @endif
 
-@if ($errors->any())
+@if ($showErrors && $errors->any())
     <div class="alert alert-error">
         <x-icon name="alert" />
         <div>
