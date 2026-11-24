@@ -37,7 +37,7 @@
             <div class="container">
                 <div class="section-head">
                     <h2>{{ __('Popular books') }}</h2>
-                    <a href="{{ route('books.index', ['sort' => 'popular']) }}" class="see-all">{{ __('View all') }} <x-icon name="arrow-right" class="flip-rtl" /></a>
+                    <a href="{{ route('books.index', ['source' => 'admin', 'sort' => 'popular']) }}" class="see-all">{{ __('View all') }} <x-icon name="arrow-right" class="flip-rtl" /></a>
                 </div>
                 <div class="books-grid">
                     @foreach ($popularBooks as $book)
@@ -51,7 +51,7 @@
             <div class="container">
                 <div class="section-head">
                     <h2>{{ __('Latest books') }}</h2>
-                    <a href="{{ route('books.index') }}" class="see-all">{{ __('View all') }} <x-icon name="arrow-right" class="flip-rtl" /></a>
+                    <a href="{{ route('books.index', ['source' => 'admin']) }}" class="see-all">{{ __('View all') }} <x-icon name="arrow-right" class="flip-rtl" /></a>
                 </div>
                 <div class="books-grid">
                     @foreach ($latestBooks as $book)
@@ -62,18 +62,45 @@
         </section>
     @endif
 
+    <section class="section" id="user-books" style="padding-top: 0;">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <h2>{{ __('Books by users') }}</h2>
+                    <p>{{ __('Books shared by our members and approved by the library team.') }}</p>
+                </div>
+                @if ($userBooks->isNotEmpty())
+                    <a href="{{ route('books.index', ['source' => 'user']) }}" class="see-all">{{ __('View all user books') }} <x-icon name="arrow-right" class="flip-rtl" /></a>
+                @endif
+            </div>
+            @if ($userBooks->isEmpty())
+                <div class="card">
+                    <x-empty-state icon="upload" :title="__('No user books yet')" :text="__('Share a book you love — once our team approves it, it will appear here.')">
+                        <a href="{{ route('my-books.create') }}" class="btn btn-primary"><x-icon name="upload" /> {{ __('Add a book') }}</a>
+                    </x-empty-state>
+                </div>
+            @else
+                <div class="books-grid">
+                    @foreach ($userBooks as $book)
+                        <x-book-card :book="$book" />
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </section>
+
     @if ($categories->isNotEmpty())
         <section class="section home-band" id="categories">
             <div class="container">
                 <div class="section-head">
                     <h2>{{ __('Browse categories') }}</h2>
                 </div>
-                <div class="category-grid">
+                <div class="category-grid category-grid--compact">
                     @foreach ($categories as $category)
                         <a href="{{ route('books.index', ['category' => $category->id]) }}" class="category-card">
                             <span class="category-icon"><x-icon name="tag" /></span>
                             <span>
-                                <strong>{{ $category->name }}</strong>
+                                <strong>{{ $category->localizedName() }}</strong>
                                 <small>{{ trans_choice(':count book|:count books', $category->books_count) }}</small>
                             </span>
                         </a>

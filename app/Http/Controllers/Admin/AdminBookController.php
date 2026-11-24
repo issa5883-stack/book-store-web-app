@@ -24,14 +24,14 @@ class AdminBookController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::sortedByLocalizedName();
 
         return view('admin.books.index', compact('books', 'categories'));
     }
 
     public function create(): View
     {
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::sortedByLocalizedName();
 
         return view('admin.books.create', compact('categories'));
     }
@@ -40,6 +40,7 @@ class AdminBookController extends Controller
     {
         $data = $this->bookDataWithFiles($request);
         $data['status'] = Book::STATUS_APPROVED;
+        $data['source'] = Book::SOURCE_ADMIN;
         $data['admin_id'] = session('admin_id');
         $data['reviewed_at'] = now();
 
@@ -50,7 +51,7 @@ class AdminBookController extends Controller
 
     public function edit(Book $book): View
     {
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::sortedByLocalizedName();
 
         return view('admin.books.edit', compact('book', 'categories'));
     }

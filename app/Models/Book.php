@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Storage;
     'cover',
     'pdf',
     'status',
+    'source',
     'rejection_reason',
     'reviewed_at',
 ])]
@@ -36,6 +37,15 @@ class Book extends Model
     public const STATUS_APPROVED = 'approved';
 
     public const STATUS_REJECTED = 'rejected';
+
+    /** Added by an administrator (the library's own books). */
+    public const SOURCE_ADMIN = 'admin';
+
+    /** Submitted by a registered user and reviewed by an admin. */
+    public const SOURCE_USER = 'user';
+
+    /** @var list<string> */
+    public const SOURCES = [self::SOURCE_ADMIN, self::SOURCE_USER];
 
     /**
      * Get the attributes that should be cast.
@@ -94,6 +104,31 @@ class Book extends Model
     }
 
     /**
+     * Books added by the library's administrators.
+     *
+     * @param  Builder<Book>  $query
+     */
+    public function scopeFromLibrary(Builder $query): void
+    {
+        $query->where('source', self::SOURCE_ADMIN);
+    }
+
+    /**
+     * Books submitted by registered users.
+     *
+     * @param  Builder<Book>  $query
+     */
+    public function scopeFromUsers(Builder $query): void
+    {
+        $query->where('source', self::SOURCE_USER);
+    }
+
+    public function isFromUser(): bool
+    {
+        return $this->source === self::SOURCE_USER;
+    }
+
+    /**
      * Filter by a search term on title / author / category name and an optional category.
      *
      * @param  Builder<Book>  $query
@@ -102,10 +137,16 @@ class Book extends Model
     {
         $query
             ->when($search, function (Builder $query, string $search) {
-                $query->where(function (Builder $query) use ($search) {
+                // Category names are matched in English and in the visitor's language (e.g. "برمجة").
+                $categoryIds = Category::all()
+                    ->filter(fn (Category $category) => mb_stripos($category->name, $search) !== false
+                        || mb_stripos($category->localizedName(), $search) !== false)
+                    ->modelKeys();
+
+                $query->where(function (Builder $query) use ($search, $categoryIds) {
                     $query->where('title', 'like', "%{$search}%")
                         ->orWhere('author', 'like', "%{$search}%")
-                        ->orWhereHas('category', fn (Builder $query) => $query->where('name', 'like', "%{$search}%"));
+                        ->orWhereIn('category_id', $categoryIds);
                 });
             })
             ->when($categoryId, fn (Builder $query, string $categoryId) => $query->where('category_id', $categoryId));

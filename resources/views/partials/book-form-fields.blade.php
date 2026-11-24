@@ -18,7 +18,7 @@
         <select id="category_id" name="category_id" class="select @error('category_id') is-invalid @enderror">
             <option value="">{{ __('— Choose a category —') }}</option>
             @foreach ($categories as $category)
-                <option value="{{ $category->id }}" @selected(old('category_id', $book?->category_id) == $category->id)>{{ $category->name }}</option>
+                <option value="{{ $category->id }}" @selected(old('category_id', $book?->category_id) == $category->id)>{{ $category->localizedName() }}</option>
             @endforeach
         </select>
         @error('category_id') <div class="error-text">{{ $message }}</div> @enderror

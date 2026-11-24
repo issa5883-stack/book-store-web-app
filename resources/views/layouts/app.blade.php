@@ -89,7 +89,7 @@
                 <div class="footer-col">
                     <h4>{{ __('Categories') }}</h4>
                     @foreach ($footerCategories as $category)
-                        <a href="{{ route('books.index', ['category' => $category->id]) }}">{{ $category->name }}</a>
+                        <a href="{{ route('books.index', ['category' => $category->id]) }}">{{ $category->localizedName() }}</a>
                     @endforeach
                 </div>
             @endif

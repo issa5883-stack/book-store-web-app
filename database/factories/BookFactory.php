@@ -29,8 +29,20 @@ class BookFactory extends Factory
             'pages' => fake()->numberBetween(80, 900),
             'pdf' => 'books/sample.pdf',
             'status' => Book::STATUS_APPROVED,
+            'source' => Book::SOURCE_ADMIN,
             'reviewed_at' => now(),
         ];
+    }
+
+    /**
+     * A book submitted by a regular user (approved unless combined with another state).
+     */
+    public function fromUser(): static
+    {
+        return $this->state(fn () => [
+            'source' => Book::SOURCE_USER,
+            'user_id' => User::factory(),
+        ]);
     }
 
     /**
@@ -38,18 +50,16 @@ class BookFactory extends Factory
      */
     public function pending(): static
     {
-        return $this->state(fn () => [
+        return $this->fromUser()->state(fn () => [
             'status' => Book::STATUS_PENDING,
-            'user_id' => User::factory(),
             'reviewed_at' => null,
         ]);
     }
 
     public function rejected(): static
     {
-        return $this->state(fn () => [
+        return $this->fromUser()->state(fn () => [
             'status' => Book::STATUS_REJECTED,
-            'user_id' => User::factory(),
             'rejection_reason' => 'The file is not readable.',
         ]);
     }

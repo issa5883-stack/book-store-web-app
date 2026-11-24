@@ -8,7 +8,7 @@
             <div class="breadcrumb">
                 <a href="{{ route('home') }}">{{ __('Home') }}</a> / <a href="{{ route('books.index') }}">{{ __('Books') }}</a>
                 @if ($book->category)
-                    / <a href="{{ route('books.index', ['category' => $book->category_id]) }}">{{ $book->category->name }}</a>
+                    / <a href="{{ route('books.index', ['category' => $book->category_id]) }}">{{ $book->category->localizedName() }}</a>
                 @endif
             </div>
 
@@ -17,7 +17,7 @@
 
                 <div>
                     @if ($book->category)
-                        <span class="chip" style="margin-bottom: 1rem;">{{ $book->category->name }}</span>
+                        <span class="chip" style="margin-bottom: 1rem;">{{ $book->category->localizedName() }}</span>
                     @endif
                     <h1>{{ $book->title }}</h1>
                     <div class="by">{{ __('by') }} <strong>{{ $book->author }}</strong></div>

@@ -36,7 +36,7 @@ class UserBookController extends Controller
 
     public function create(): View
     {
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::sortedByLocalizedName();
 
         return view('my-books.create', compact('categories'));
     }
@@ -45,6 +45,7 @@ class UserBookController extends Controller
     {
         $data = $this->bookDataWithFiles($request);
         $data['status'] = Book::STATUS_PENDING;
+        $data['source'] = Book::SOURCE_USER;
 
         $request->user()->books()->create($data);
 
@@ -56,7 +57,7 @@ class UserBookController extends Controller
     {
         $this->ensureEditable($request, $book);
 
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::sortedByLocalizedName();
 
         return view('my-books.edit', compact('book', 'categories'));
     }

@@ -16,12 +16,14 @@ class BookController extends Controller
 {
     public function home(): View
     {
-        $popularBooks = Book::approved()->with('category')->orderByDesc('downloads')->take(5)->get();
-        $latestBooks = Book::approved()->with('category')->latest()->take(10)->get();
+        // Popular / latest show the library's own books; user submissions get their own section.
+        $popularBooks = Book::approved()->fromLibrary()->with('category')->orderByDesc('downloads')->take(5)->get();
+        $latestBooks = Book::approved()->fromLibrary()->with('category')->latest()->take(10)->get();
+        $userBooks = Book::approved()->fromUsers()->with('category')->latest()->take(5)->get();
+
         $categories = Category::withCount(['books' => fn ($query) => $query->approved()])
-            ->whereHas('books', fn ($query) => $query->approved())
             ->orderByDesc('books_count')
-            ->take(8)
+            ->orderBy('name')
             ->get();
 
         // Authors are a column on books, so they are ranked by how often their approved books are downloaded.
@@ -37,23 +39,26 @@ class BookController extends Controller
             'categories' => Category::count(),
         ];
 
-        return view('home', compact('popularBooks', 'latestBooks', 'categories', 'popularAuthors', 'stats'));
+        return view('home', compact('popularBooks', 'latestBooks', 'userBooks', 'categories', 'popularAuthors', 'stats'));
     }
 
     public function index(Request $request): View
     {
+        $source = in_array($request->source, Book::SOURCES, true) ? $request->source : null;
+
         $books = Book::approved()
             ->with('category')
             ->filter($request->search, $request->category)
+            ->when($source, fn ($query, string $source) => $query->where('source', $source))
             ->when($request->sort === 'popular', fn ($query) => $query->orderByDesc('downloads'))
             ->when($request->sort === 'title', fn ($query) => $query->orderBy('title'))
             ->latest()
             ->paginate(12)
             ->withQueryString();
 
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::sortedByLocalizedName();
 
-        return view('books.index', compact('books', 'categories'));
+        return view('books.index', compact('books', 'categories', 'source'));
     }
 
     public function show(Book $book): View

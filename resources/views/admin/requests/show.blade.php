@@ -14,7 +14,7 @@
 
         <div class="card card-body">
             @if ($book->category)
-                <span class="chip" style="margin-bottom: .75rem;">{{ $book->category->name }}</span>
+                <span class="chip" style="margin-bottom: .75rem;">{{ $book->category->localizedName() }}</span>
             @endif
             <h2 style="font-size: 1.6rem;">{{ $book->title }}</h2>
             <p class="muted">{{ __('by') }} <strong style="color: var(--ink);">{{ $book->author }}</strong></p>

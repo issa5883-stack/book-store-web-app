@@ -6,7 +6,7 @@
         <div class="author">{{ $book->author }}</div>
         <div class="book-meta">
             @if ($book->category)
-                <span class="chip">{{ $book->category->name }}</span>
+                <span class="chip">{{ $book->category->localizedName() }}</span>
             @else
                 <span></span>
             @endif

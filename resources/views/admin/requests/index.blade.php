@@ -29,7 +29,7 @@
                                         <div><strong>{{ $book->user?->name }}</strong><div class="muted small">{{ $book->user?->email }}</div></div>
                                     </div>
                                 </td>
-                                <td>{{ $book->category?->name ?? '—' }}</td>
+                                <td>{{ $book->category?->localizedName() ?? '—' }}</td>
                                 <td class="muted">{{ $book->created_at->diffForHumans() }}</td>
                                 <td>
                                     <div class="actions">

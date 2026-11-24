@@ -9,13 +9,25 @@ use Illuminate\Support\Str;
 class CategorySeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * The library's subjects (what a book is about). Arabic names live in lang/ar.json.
+     *
+     * @var list<string>
      */
+    public const NAMES = [
+        'Programming', 'Science', 'Technology', 'History', 'Novels',
+        'Literature', 'Philosophy', 'Religion', 'Psychology', 'Self Development',
+        'Business', 'Economics', 'Education', 'Biography', 'Poetry',
+        'Children', 'Arts', 'Health', 'Language', 'Law',
+    ];
+
     public function run(): void
     {
-        $names = ['Programming', 'Science', 'History', 'Novels', 'Business', 'Self Development', 'Religion', 'Languages'];
+        // The earlier "Languages" category becomes "Language", keeping its id and books.
+        if (! Category::where('slug', 'language')->exists()) {
+            Category::where('slug', 'languages')->update(['name' => 'Language', 'slug' => 'language']);
+        }
 
-        foreach ($names as $name) {
+        foreach (self::NAMES as $name) {
             Category::updateOrCreate(['slug' => Str::slug($name)], ['name' => $name]);
         }
     }

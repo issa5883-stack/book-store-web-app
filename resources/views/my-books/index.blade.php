@@ -51,7 +51,7 @@
                                                 <div><strong>{{ $book->title }}</strong><span>{{ $book->author }}</span></div>
                                             </div>
                                         </td>
-                                        <td>{{ $book->category?->name ?? '—' }}</td>
+                                        <td>{{ $book->category?->localizedName() ?? '—' }}</td>
                                         <td>
                                             <x-status-badge :status="$book->status" />
                                             @if ($book->rejection_reason)

@@ -15,7 +15,7 @@
         <select name="category" class="select" style="width: auto;" onchange="this.form.submit()">
             <option value="">{{ __('All categories') }}</option>
             @foreach ($categories as $category)
-                <option value="{{ $category->id }}" @selected(request('category') == $category->id)>{{ $category->name }}</option>
+                <option value="{{ $category->id }}" @selected(request('category') == $category->id)>{{ $category->localizedName() }}</option>
             @endforeach
         </select>
         <select name="status" class="select" style="width: auto;" onchange="this.form.submit()">
@@ -50,7 +50,7 @@
                                         <div><strong>{{ $book->title }}</strong><span>{{ $book->author }}</span></div>
                                     </div>
                                 </td>
-                                <td>{{ $book->category?->name ?? '—' }}</td>
+                                <td>{{ $book->category?->localizedName() ?? '—' }}</td>
                                 <td>{{ $book->uploaderName() }}</td>
                                 <td><x-status-badge :status="$book->status" /></td>
                                 <td>{{ number_format($book->downloads) }}</td>

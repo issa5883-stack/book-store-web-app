@@ -459,3 +459,12 @@ html[lang="ar"] .brand { letter-spacing: 0; }
     .nav-actions .lang-switch span { display: none; }
     .home-hero .hero-search > .icon { display: none; }
 }
+
+/* home: all categories in a compact grid (same card style, smaller) */
+.category-grid--compact { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .75rem; }
+.category-grid--compact .category-card { padding: .7rem .85rem; gap: .7rem; }
+.category-grid--compact .category-icon { width: 34px; height: 34px; border-radius: 10px; }
+.category-grid--compact .category-icon .icon { width: 1rem; height: 1rem; }
+@media (max-width: 480px) {
+    .category-grid--compact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

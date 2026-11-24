@@ -5,7 +5,7 @@
         <img src="{{ $book->coverUrl() }}" alt="{{ $book->title }}" loading="lazy">
     @else
         <div class="cover-art" style="background: linear-gradient(150deg, {{ $from }}, {{ $to }});">
-            <div class="cover-cat">{{ $book->category?->name ?? __('Book') }}</div>
+            <div class="cover-cat">{{ $book->category?->localizedName() ?? __('Book') }}</div>
             <div class="cover-title">{{ $book->title }}</div>
             <div class="cover-author">{{ $book->author }}</div>
         </div>
