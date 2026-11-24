@@ -1,58 +1,282 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# BooksWeb
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+BooksWeb is a free digital library built with Laravel. Visitors browse and download PDF books, registered users submit books of their own, and administrators review every submission before it goes public. The whole site is available in **English** and **Arabic** (with full right-to-left layout).
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Table of Contents
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Demo Accounts](#demo-accounts)
+- [How It Works](#how-it-works)
+- [Routes Overview](#routes-overview)
+- [Project Structure](#project-structure)
+- [Languages (English / Arabic)](#languages-english--arabic)
+- [Running Tests](#running-tests)
+- [Code Style](#code-style)
+- [License](#license)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Visitors
+- Browse approved books on the home page: popular, latest and community-submitted books.
+- Search by title or author, filter by category and source (library or users), and sort by newest, most popular or title.
+- View a book's details and download its PDF (downloads are counted).
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Registered users
+- Sign up and sign in.
+- Submit books (PDF up to 50 MB, optional cover image up to 4 MB).
+- Track each request in **My Books**: pending, approved or rejected (with the admin's reason).
+- Edit or delete a request until it is approved. An edited request goes back to review.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### Administrators
+- Separate admin sign-in and dashboard with library statistics.
+- Add, edit and delete library books directly (published right away).
+- Review user requests: approve, or reject with a reason.
+- Manage categories and registered users.
 
-## Agentic Development
+### Interface
+- One centered, responsive card for sign-in and sign-up, with a show/hide password button, a Caps Lock warning, a password strength meter and a live "passwords match" check.
+- Each validation error appears under its own field.
+- Language switcher on every page.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+---
 
-```bash
-composer require laravel/boost --dev
+## Tech Stack
 
-php artisan boost:install
+| Layer | Technology |
+|---|---|
+| Backend | PHP 8.3+, Laravel 13 |
+| Database | MySQL (sessions, cache and queue use the database driver) |
+| Views | Blade templates and Blade components |
+| Styling | Hand-written CSS in `public/css/app.css` (no build step required) |
+| Fonts | Geist (English), Cairo (Arabic) from Google Fonts |
+| Testing | PHPUnit 12 |
+| Code style | Laravel Pint |
+
+---
+
+## Requirements
+
+- PHP **8.3 or newer** with the usual Laravel extensions (`pdo_mysql`, `mbstring`, `openssl`, `fileinfo`, …)
+- Composer 2
+- MySQL 8 (or MariaDB)
+- Node.js and npm are **optional**. The pages load plain CSS from `public/`, so no frontend build is needed to run the site.
+
+---
+
+## Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/issa5883-stack/book-store-web-app.git booksweb
+   cd booksweb
+   ```
+
+2. **Install PHP dependencies**
+
+   ```bash
+   composer install
+   ```
+
+3. **Create the environment file and app key**
+
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+4. **Create the database and set the connection** in `.env`:
+
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=booksweb
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+
+5. **Run the migrations and seed demo data**
+
+   ```bash
+   php artisan migrate --seed
+   ```
+
+   This creates an admin, a test user, the book categories and a set of demo books.
+
+6. **Link the storage folder** so uploaded PDFs and covers are reachable:
+
+   ```bash
+   php artisan storage:link
+   ```
+
+7. **Start the server**
+
+   ```bash
+   php artisan serve
+   ```
+
+   Open <http://localhost:8000>.
+
+---
+
+## Demo Accounts
+
+Created by `php artisan db:seed`. **For local development only. Change or remove them before deploying.**
+
+| Role | Sign-in page | Email | Password |
+|---|---|---|---|
+| Administrator | `/admin/login` | `admin@example.com` | `Admin@12345` |
+| User | `/login` | `user@example.com` | `User@12345` |
+
+---
+
+## How It Works
+
+### Book life cycle
+
+```
+ User submits a book ──► pending ──► Admin approves ──► approved (public)
+                            │
+                            └──────► Admin rejects  ──► rejected (reason shown to the user)
+
+ User edits a pending or rejected request ──► back to pending
+ Admin adds a book ──────────────────────────► approved immediately
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Every book has a **source**:
 
-## Contributing
+- `admin`: added by an administrator (the library's own books)
+- `user`: submitted by a registered user
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Only `approved` books are shown to the public.
 
-## Code of Conduct
+### Authentication
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+| Who | Guard / check | Middleware |
+|---|---|---|
+| Users | Laravel's default `web` guard (`users` table) | `auth`, `guest` |
+| Administrators | Separate `admins` table; the admin's id is kept in the session | `admin` (`App\Http\Middleware\AdminAuth`) |
 
-## Security Vulnerabilities
+### Files
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Uploaded files are stored on the `public` disk:
+
+- PDFs: `storage/app/public/books`
+- Covers: `storage/app/public/covers`
+
+---
+
+## Routes Overview
+
+| Area | Method & URL | Description |
+|---|---|---|
+| Public | `GET /` | Home page |
+| | `GET /books` | Browse, search and filter books |
+| | `GET /books/{book}` | Book details |
+| | `GET /books/{book}/download` | Download the PDF |
+| | `GET /language/{locale}` | Switch language (`en` / `ar`) |
+| Guests | `GET/POST /sign_up` | Create an account |
+| | `GET/POST /login` | Sign in |
+| Users | `/my-books` (resource, no `show`) | Submit and manage book requests |
+| | `POST /logout` | Sign out |
+| Admin | `GET/POST /admin/login` | Admin sign in |
+| | `GET /admin/dashboard` | Dashboard |
+| | `/admin/books` (resource, no `show`) | Manage library books |
+| | `GET /admin/requests`, `/admin/requests/{book}` | Review requests |
+| | `PATCH /admin/requests/{book}/approve` · `/reject` | Approve or reject |
+| | `/admin/categories` | Manage categories |
+| | `/admin/users` | List and delete users |
+
+Run `php artisan route:list --except-vendor` for the full list.
+
+---
+
+## Project Structure
+
+```
+app/
+├── Http/
+│   ├── Controllers/
+│   │   ├── AuthController.php         # user sign up / sign in / logout
+│   │   ├── BookController.php         # public library
+│   │   ├── UserBookController.php     # "My Books" requests
+│   │   ├── AdminController.php        # admin sign in, dashboard
+│   │   ├── LanguageController.php     # language switch
+│   │   └── Admin/                     # books, requests, categories, users
+│   ├── Middleware/
+│   │   ├── AdminAuth.php              # protects /admin
+│   │   └── SetLocale.php              # applies the chosen language
+│   └── Requests/BookRequest.php       # book upload validation
+└── Models/                            # Admin, Book, Category, User
+
+database/
+├── migrations/
+├── factories/
+└── seeders/                           # AdminSeeder, CategorySeeder, DatabaseSeeder
+
+lang/
+├── ar.json                            # Arabic translations of the interface
+├── ar/                                # Arabic validation messages
+└── en/
+
+public/css/app.css                     # the site's stylesheet
+
+resources/views/
+├── layouts/                           # app, admin, auth
+├── components/                        # book-card, icon, flash, auth-field, …
+├── partials/                          # shared scripts, form fields, pagination
+├── auth/                              # sign_in, sign_up
+├── admin/                             # admin pages
+├── books/                             # public library pages
+└── my-books/                          # user requests
+
+tests/Feature/                         # feature tests
+```
+
+---
+
+## Languages (English / Arabic)
+
+- Supported languages are defined in `config/app.php` under `supported_locales`, each with its text direction (`ltr` / `rtl`).
+- The chosen language is stored in the session and applied by the `SetLocale` middleware.
+- Interface text is wrapped in `__('...')`. English text is the key, and the Arabic version lives in `lang/ar.json`.
+
+To add a new string, write it in English in the view with `__('Your text')`, then add its translation to `lang/ar.json`.
+
+---
+
+## Running Tests
+
+The tests run on an in-memory SQLite database (see `phpunit.xml`), so they never touch your MySQL data. The PHP `pdo_sqlite` extension is required.
+
+```bash
+php artisan test            # the whole suite
+php artisan test --compact  # shorter output
+php artisan test --filter=AuthPagesTest
+```
+
+Covered areas include the book submission and review flow, the home page, book sources, category seeding, language switching and the authentication pages.
+
+---
+
+## Code Style
+
+PHP code follows the Laravel preset of [Laravel Pint](https://laravel.com/docs/pint):
+
+```bash
+vendor/bin/pint
+```
+
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
