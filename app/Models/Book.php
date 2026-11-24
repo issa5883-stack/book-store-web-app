@@ -94,7 +94,7 @@ class Book extends Model
     }
 
     /**
-     * Filter by a search term on title / author and an optional category.
+     * Filter by a search term on title / author / category name and an optional category.
      *
      * @param  Builder<Book>  $query
      */
@@ -104,7 +104,8 @@ class Book extends Model
             ->when($search, function (Builder $query, string $search) {
                 $query->where(function (Builder $query) use ($search) {
                     $query->where('title', 'like', "%{$search}%")
-                        ->orWhere('author', 'like', "%{$search}%");
+                        ->orWhere('author', 'like', "%{$search}%")
+                        ->orWhereHas('category', fn (Builder $query) => $query->where('name', 'like', "%{$search}%"));
                 });
             })
             ->when($categoryId, fn (Builder $query, string $categoryId) => $query->where('category_id', $categoryId));

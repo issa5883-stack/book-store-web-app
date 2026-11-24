@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Category;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
@@ -17,22 +16,28 @@ class BookController extends Controller
 {
     public function home(): View
     {
-        $latestBooks = Book::approved()->with('category')->latest()->take(8)->get();
-        $popularBooks = Book::approved()->with('category')->orderByDesc('downloads')->take(4)->get();
+        $popularBooks = Book::approved()->with('category')->orderByDesc('downloads')->take(5)->get();
+        $latestBooks = Book::approved()->with('category')->latest()->take(10)->get();
         $categories = Category::withCount(['books' => fn ($query) => $query->approved()])
+            ->whereHas('books', fn ($query) => $query->approved())
             ->orderByDesc('books_count')
+            ->take(8)
+            ->get();
+
+        // Authors are a column on books, so they are ranked by how often their approved books are downloaded.
+        $popularAuthors = Book::approved()
+            ->selectRaw('author, count(*) as books_count, sum(downloads) as total_downloads')
+            ->groupBy('author')
+            ->orderByDesc('total_downloads')
             ->take(8)
             ->get();
 
         $stats = [
             'books' => Book::approved()->count(),
             'categories' => Category::count(),
-            'downloads' => (int) Book::approved()->sum('downloads'),
-            'pending' => Book::pending()->count(),
-            'members' => User::count(),
         ];
 
-        return view('home', compact('latestBooks', 'popularBooks', 'categories', 'stats'));
+        return view('home', compact('popularBooks', 'latestBooks', 'categories', 'popularAuthors', 'stats'));
     }
 
     public function index(Request $request): View

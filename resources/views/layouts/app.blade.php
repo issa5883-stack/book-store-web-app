@@ -21,10 +21,11 @@
 
             <nav class="nav-links">
                 <a href="{{ route('home') }}" @class(['active' => request()->routeIs('home')])>{{ __('Home') }}</a>
-                <a href="{{ route('books.index') }}" @class(['active' => request()->routeIs('books.*')])>{{ __('Browse Books') }}</a>
+                <a href="{{ route('books.index') }}" @class(['active' => request()->routeIs('books.*')])>{{ __('Books') }}</a>
+                <a href="{{ route('home') }}#categories">{{ __('Categories') }}</a>
+                <a href="{{ route('home') }}#authors">{{ __('Authors') }}</a>
                 @auth
-                    <a href="{{ route('my-books.index') }}" @class(['active' => request()->routeIs('my-books.index', 'my-books.edit')])>{{ __('My Books') }}</a>
-                    <a href="{{ route('my-books.create') }}" @class(['active' => request()->routeIs('my-books.create')])>{{ __('Submit a Book') }}</a>
+                    <a href="{{ route('my-books.index') }}" @class(['active' => request()->routeIs('my-books.*')])>{{ __('My Books') }}</a>
                 @endauth
             </nav>
 
@@ -62,27 +63,41 @@
         @yield('content')
     </main>
 
+    @php($footerCategories = \App\Models\Category::orderBy('name')->take(5)->get())
     <footer class="footer">
-        <div class="container">
-            <div>
+        <div class="container footer-grid">
+            <div class="footer-about">
                 <a href="{{ route('home') }}" class="brand">
                     <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="6.5" cy="6.5" r="4.5"/><circle cx="17.5" cy="6.5" r="4.5"/><circle cx="6.5" cy="17.5" r="4.5"/><rect x="13" y="13" width="9" height="9" rx="1.5"/></svg></span>
                     <span>BooksWeb</span>
                 </a>
-                <p style="margin-top: 1rem; max-width: 22rem;">{{ __('A community digital library. Read, download and share books — every upload is reviewed by our team.') }}</p>
+                <p>{{ __('A community digital library. Read, download and share books — every upload is reviewed by our team.') }}</p>
             </div>
-            <div class="footer-links">
-                <a href="{{ route('books.index') }}">{{ __('Browse') }}</a>
+            <div class="footer-col">
+                <h4>{{ __('Quick links') }}</h4>
+                <a href="{{ route('home') }}">{{ __('Home') }}</a>
+                <a href="{{ route('books.index') }}">{{ __('Books') }}</a>
                 @auth
+                    <a href="{{ route('my-books.index') }}">{{ __('My Books') }}</a>
                     <a href="{{ route('my-books.create') }}">{{ __('Submit a book') }}</a>
                 @else
-                    <a href="{{ route('sign_up') }}">{{ __('Join') }}</a>
+                    <a href="{{ route('sign_up') }}">{{ __('Create account') }}</a>
+                    <a href="{{ route('login') }}">{{ __('Sign in') }}</a>
                 @endauth
-                <a href="{{ route('admin.login') }}">{{ __('Admin') }}</a>
-                <x-language-switcher />
             </div>
+            @if ($footerCategories->isNotEmpty())
+                <div class="footer-col">
+                    <h4>{{ __('Categories') }}</h4>
+                    @foreach ($footerCategories as $category)
+                        <a href="{{ route('books.index', ['category' => $category->id]) }}">{{ $category->name }}</a>
+                    @endforeach
+                </div>
+            @endif
         </div>
-        <div class="container footer-bottom">© {{ date('Y') }} {{ config('app.name') }}. {{ __('All rights reserved.') }}</div>
+        <div class="container footer-bottom">
+            <span>© {{ date('Y') }} {{ config('app.name') }}. {{ __('All rights reserved.') }}</span>
+            <x-language-switcher />
+        </div>
     </footer>
 
     @include('partials.scripts')

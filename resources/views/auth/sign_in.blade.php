@@ -33,5 +33,4 @@
     </form>
 
     <p class="auth-foot">{{ __('No account yet?') }} <a href="{{ route('sign_up') }}"><strong>{{ __('Create one') }}</strong></a></p>
-    <p class="auth-foot" style="margin-top: .5rem;"><a href="{{ route('admin.login') }}" class="muted"><x-icon name="shield" /> {{ __('Administrator sign in') }}</a></p>
 @endsection
