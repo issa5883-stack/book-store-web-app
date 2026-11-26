@@ -190,8 +190,45 @@ class BookFlowTest extends TestCase
         Storage::disk('public')->put('books/sample.pdf', '%PDF-1.4');
         $book = Book::factory()->create(['downloads' => 3]);
 
-        $this->get(route('books.download', $book))->assertOk()->assertDownload();
+        $this->actingAs(User::factory()->create())
+            ->get(route('books.download', $book))
+            ->assertOk()
+            ->assertDownload();
 
         $this->assertSame(4, $book->refresh()->downloads);
+    }
+
+    public function test_guest_cannot_read_or_download_a_book(): void
+    {
+        Storage::disk('public')->put('books/sample.pdf', '%PDF-1.4');
+        $book = Book::factory()->create(['downloads' => 3]);
+
+        $this->get(route('books.download', $book))->assertRedirect(route('login'));
+        $this->get(route('books.read', $book))->assertRedirect(route('login'));
+
+        $this->assertSame(3, $book->refresh()->downloads);
+    }
+
+    public function test_signed_in_user_can_read_a_book_online(): void
+    {
+        Storage::disk('public')->put('books/sample.pdf', '%PDF-1.4');
+        $book = Book::factory()->create();
+
+        $response = $this->actingAs(User::factory()->create())->get(route('books.read', $book));
+
+        $response->assertOk();
+        $this->assertStringStartsWith('inline', $response->headers->get('Content-Disposition'));
+    }
+
+    public function test_guest_is_sent_back_to_the_book_after_signing_in(): void
+    {
+        Storage::disk('public')->put('books/sample.pdf', '%PDF-1.4');
+        $book = Book::factory()->create();
+        $user = User::factory()->create(['password' => 'secret123']);
+
+        $this->get(route('books.download', $book))->assertRedirect(route('login'));
+
+        $this->post(route('login.submit'), ['email' => $user->email, 'password' => 'secret123'])
+            ->assertRedirect(route('books.download', $book));
     }
 }

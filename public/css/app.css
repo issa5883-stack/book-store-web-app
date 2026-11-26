@@ -228,6 +228,7 @@ p { margin: 0 0 1rem; }
 .dropzone .icon { width: 2rem; height: 2rem; }
 .dropzone strong { color: var(--ink); font-size: .9rem; }
 .dropzone .file-name { font-size: .8rem; font-weight: 600; color: var(--primary); word-break: break-all; }
+.dropzone .cover-preview { width: 90px; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 6px; box-shadow: 0 4px 12px rgba(15, 23, 42, .15); }
 .check { display: flex; align-items: center; gap: .5rem; font-size: .9rem; color: var(--ink-2); }
 .form-actions { display: flex; gap: .75rem; justify-content: flex-end; padding-top: 1.5rem; margin-top: 1.5rem; border-top: 1px solid var(--line); }
 

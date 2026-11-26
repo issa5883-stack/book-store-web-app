@@ -78,6 +78,16 @@ class BookController extends Controller
         return view('books.show', compact('book', 'relatedBooks'));
     }
 
+    /**
+     * Stream the PDF inline so signed-in users can read it in the browser.
+     */
+    public function read(Book $book): StreamedResponse
+    {
+        abort_unless($book->isApproved(), 404);
+
+        return Storage::disk('public')->response($book->pdf, str($book->title)->slug().'.pdf');
+    }
+
     public function download(Book $book): StreamedResponse
     {
         abort_unless($book->isApproved(), 404);

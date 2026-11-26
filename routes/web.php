@@ -22,7 +22,6 @@ Route::get('/language/{locale}', [LanguageController::class, 'switch'])->name('l
 Route::get('/', [BookController::class, 'home'])->name('home');
 Route::get('/books', [BookController::class, 'index'])->name('books.index');
 Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
-Route::get('/books/{book}/download', [BookController::class, 'download'])->name('books.download');
 
 /*
 | User sign up / sign in
@@ -35,9 +34,11 @@ Route::middleware('guest')->group(function () {
 });
 
 /*
-| Logged-in users: submit books as requests for admin approval
+| Logged-in users: read / download books and submit books as requests for admin approval
 */
 Route::middleware('auth')->group(function () {
+    Route::get('/books/{book}/read', [BookController::class, 'read'])->name('books.read');
+    Route::get('/books/{book}/download', [BookController::class, 'download'])->name('books.download');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::resource('my-books', UserBookController::class)
         ->parameters(['my-books' => 'book'])

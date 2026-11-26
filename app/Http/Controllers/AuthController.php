@@ -35,7 +35,7 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->route('my-books.index')->with('success', __('Welcome :name! Your account is ready.', ['name' => $user->name]));
+        return redirect()->intended(route('my-books.index'))->with('success', __('Welcome :name! Your account is ready.', ['name' => $user->name]));
     }
 
     public function showSignIn(): View|RedirectResponse

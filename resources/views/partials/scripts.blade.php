@@ -9,6 +9,17 @@
             if (label) {
                 label.textContent = file ? file.name + ' · ' + (file.size / 1048576).toFixed(2) + ' MB' : '';
             }
+
+            // Preview a newly chosen cover image.
+            var preview = zone.querySelector('.cover-preview');
+            if (preview && file && file.type.indexOf('image/') === 0) {
+                preview.src = URL.createObjectURL(file);
+                preview.hidden = false;
+                var icon = zone.querySelector('.icon');
+                if (icon) {
+                    icon.style.display = 'none';
+                }
+            }
         });
     });
 

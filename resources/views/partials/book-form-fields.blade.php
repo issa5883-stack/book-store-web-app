@@ -65,10 +65,15 @@
         <label>{{ __('Cover image') }}</label>
         <label class="dropzone @error('cover') is-invalid @enderror">
             <input type="file" name="cover" accept="image/*">
-            <x-icon name="image" />
+            @if ($book?->cover)
+                <img class="cover-preview" src="{{ $book->coverUrl() }}" alt="{{ $book->title }}">
+            @else
+                <img class="cover-preview" alt="" hidden>
+                <x-icon name="image" />
+            @endif
             <strong>{{ $book?->cover ? __('Replace the cover') : __('Upload a cover (optional)') }}</strong>
             <span class="small">{{ __('JPG, PNG or WEBP · up to 4 MB') }}</span>
-            <span class="file-name"></span>
+            <span class="file-name">@if ($book?->cover) {{ __('Current:') }} {{ basename($book->cover) }} @endif</span>
         </label>
         @error('cover') <div class="error-text">{{ $message }}</div> @enderror
     </div>

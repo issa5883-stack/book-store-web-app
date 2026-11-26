@@ -24,7 +24,7 @@
 
                     <div class="btn-row">
                         <a href="{{ route('books.download', $book) }}" class="btn btn-primary btn-lg"><x-icon name="download" /> {{ __('Download PDF') }}</a>
-                        <a href="{{ $book->pdfUrl() }}" target="_blank" class="btn btn-light btn-lg"><x-icon name="eye" /> {{ __('Read online') }}</a>
+                        <a href="{{ route('books.read', $book) }}" @auth target="_blank" @endauth class="btn btn-light btn-lg"><x-icon name="eye" /> {{ __('Read online') }}</a>
                     </div>
 
                     <div class="facts">
